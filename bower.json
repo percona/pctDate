@@ -1,0 +1,29 @@
+{
+  "name": "pct-date",
+  "description": "Angular module to provide additional Date functionality",
+  "authors": [
+    "franleplant <franleplant@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "angular.js",
+    "timezone",
+    "module",
+    "ng",
+    "date"
+  ],
+  "main": "dist/pctDate.js",
+  "ignore": [
+    "*",
+    "!dist",
+    "!dist/pctDate.min.js"
+  ],
+  "dependencies": {
+    "angular": ">1.2",
+    "pct-moment": "~0.0.2"
+  },
+  "devDependencies": {
+    "angular-mocks": ">1.2"
+  }
+}
