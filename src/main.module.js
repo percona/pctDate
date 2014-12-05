@@ -16,7 +16,8 @@
      *
      */
     angular.module('pctDate', [
-        'pctDate.toUnixTs'
+        'pctDate.toUnixTs',
+        'pctDate.isDate'
     ]);
 
 }) (angular);
