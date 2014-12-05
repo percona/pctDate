@@ -1,8 +1,11 @@
 (function(angular) {
     'use strict';
 
-    angular.module('pctDate.toUnixTs', [])
+    angular.module('pctDate.toUnixTs', ['pctDate.isDate'])
         .factory('toUnixTs', toUnixTsService);
+
+
+    toUnixTsService.$inject = ['isDate'];
 
 
     /**
@@ -25,11 +28,11 @@
      *
      *
      */
-    function toUnixTsService() {
+    function toUnixTsService(isDate) {
 
         return function toUnixTs(date) {
 
-            if (!angular.isDate(date) || isNaN(date.valueOf())) {
+            if (!isDate(date)) {
                 throw new TypeError('toUnixTs: date parameter should be a Native Date js object');
             }
 
