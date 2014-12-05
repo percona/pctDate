@@ -1,4 +1,4 @@
-(function(angular) {
+(function() {
     'use strict';
 
     /*
@@ -20,4 +20,4 @@
         'pctDate.isDate'
     ]);
 
-}) (angular);
+}) ();

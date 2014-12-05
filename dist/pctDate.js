@@ -1,4 +1,60 @@
 (function() {
+
+    angular.module('pctDate.isDate', [])
+        .factory('isDate', isDateService);
+
+
+    /*
+     * @ngdoc factory
+     * @name isDate
+     * @kind functions
+     *
+     * @description
+     * Helper function that evaluates if its only @param
+     * is a Native Js Valid Date Object.
+     *
+     * We use angular.isDate to assert that the input
+     * is a Date object and we also use date.valueOf
+     * to evaluate if it is a valid Date Object
+     *
+     *
+     * @param {*} value
+     * @returns {Boolean}
+     *
+     */
+    function isDateService() {
+
+        return function isDate(value) {
+            return angular.isDate(value) && !isNaN(value.valueOf());
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    /*
+     * @ngdoc module
+     * @name pctDate
+     *
+     * @description
+     * Date utility module for PCT!
+     *
+     * The intention behind this module is to provide
+     * common date operations, integration with multi timezone
+     * applications and separation of concerns while
+     * trying to encourage native Date usage and native API's usage.
+     *
+     *
+     */
+    angular.module('pctDate', [
+        'pctDate.toUnixTs',
+        'pctDate.isDate'
+    ]);
+
+}) ();
+
+(function() {
     'use strict';
 
     angular.module('pctDate.toUnixTs', ['pctDate.isDate'])

@@ -22,6 +22,8 @@ var DIR = {
     dist: 'dist/'
 };
 
+//Other config parameters
+var distName = 'pctDate';
 
 
 
@@ -96,10 +98,10 @@ gulp.task('continuous', [
  */
 gulp.task('dist', ['clean:dist'], function() {
     return gulp.src(DIR.src)
-        .pipe($.concat('pctMoment.js'))
+        .pipe($.concat(distName + '.js'))
         .pipe(gulp.dest(DIR.dist))
         .pipe($.uglify())
-        .pipe($.rename('pctMoment.min.js'))
+        .pipe($.rename(distName + '.min.js'))
         .pipe(gulp.dest(DIR.dist));
 });
 
