@@ -21,8 +21,13 @@
             require: 'ngModel',
             templateUrl: 'src/timezoneSelector/timezoneSelector.tpl.html',
             link: link,
+
+            //TODO: explain why we use two way data binding for ngModel (=) and text binding
+            //for class (@)
+            //https://umur.io/angularjs-directives-using-isolated-scope-with-attributes/
             scope: {
-                ngModel: '=ngModel'
+                ngModel: '=ngModel',
+                clazz: '@class'
             }
 
         }
