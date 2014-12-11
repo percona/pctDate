@@ -21,6 +21,7 @@
             restrict: 'E',
             require: 'ngModel',
             controller: '_pctTimezoneSelectorDirectiveController',
+            controllerAs: 'ctrl',
             templateUrl: 'src/timezoneSelector/timezoneSelector.tpl.html',
             link: link,
 

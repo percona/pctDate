@@ -56,17 +56,20 @@
         var tzList = aux[1]
 
 
-        $scope.selectedRegion = 'America';
+        this.selectedRegion = 'America';
 
-        $scope.tzRegionList = tzRegionList;
+        this.tzRegionList = tzRegionList;
 
-        $scope.getTzListForRegion = function(selectedRegion) {
+        this.getTzListForRegion = function(selectedRegion) {
 
             return tzList.filter(function(element) {
                 return element.region === selectedRegion
             });
 
         };
+
+
+        //explain why ngModel in the tpl is used with the scope instead of the ctrl
 
     }
 

@@ -1,9 +1,9 @@
 
 <p>{{selectedRegion}}<p>
 
-<select ng-model="selectedRegion" ng-options="region for region in tzRegionList" class="{{clazz}}">
+<select ng-model="ctrl.selectedRegion" ng-options="region for region in ctrl.tzRegionList" class="{{clazz}}">
 </select>
 
 
-<select ng-model="ngModel" ng-options="tz.id as tz.subregion for tz in getTzListForRegion(selectedRegion) " class="{{clazz}}">
+<select ng-model="ngModel" ng-options="tz.id as tz.subregion for tz in ctrl.getTzListForRegion(ctrl.selectedRegion) " class="{{clazz}}">
 </select>
