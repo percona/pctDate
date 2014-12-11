@@ -1,14 +1,12 @@
 (function() {
 
     angular.module('pctDate.timezoneSelector.directive', [
-        'pctDate.timezoneSelector.controller',
-        'pctMoment'
-
+        'pctDate.timezoneSelector.controller'
         ])
         .directive('pctTimezoneSelector', directiveDef);
 
 
-    function directiveDef(moment) {
+    function directiveDef() {
 
 
 
