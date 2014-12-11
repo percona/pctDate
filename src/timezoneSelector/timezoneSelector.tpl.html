@@ -1,4 +1,9 @@
-<select ng-model="ngModel" ng-options="tz for tz in timezoneList" class="{{clazz}}">
-    <option value="">Use your computer's default Timezone</option>
+
+<p>{{selectedRegion}}<p>
+
+<select ng-model="selectedRegion" ng-options="region for region in tzRegionList" class="{{clazz}}">
 </select>
-<br/>
+
+
+<select ng-model="ngModel" ng-options="tz.id as tz.subregion for tz in getTzListForRegion(selectedRegion) " class="{{clazz}}">
+</select>
