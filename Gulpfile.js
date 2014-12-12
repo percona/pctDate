@@ -110,6 +110,10 @@ gulp.task('templates', function() {
  * Respectively, these files are the concatenated
  * version of the lib and the minified version
  *
+ *
+ * In this task we are also processing html angular
+ * templates into Angular's template Cache
+ *
  */
 gulp.task('dist', ['clean:dist'], function() {
     return gulp.src([DIR.src, DIR.templates])
