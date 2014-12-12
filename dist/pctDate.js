@@ -119,6 +119,33 @@
     controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion']
 
 
+
+    /**
+     * @ngdoc controller
+     * @name _pctTimezoneSelectorDirectiveController
+     * **note** about the name: The underscore and the
+     * weird long and too detaily name are deliberated.
+     * First of all this is a private controller and should
+     * not be used alone.
+     * It main purpose is to server pctTimezoneSelector directive.
+     * And so that's why we don't want to pollute the global
+     * Angular name space, and this our way to try not to.
+     *
+     *
+     * @description
+     * This controller concentrates little to none logic for
+     * the pctTimezoneSelector directive
+     *
+     *
+     *
+     * **Note** about controllerAs and Scope.
+     * We are using as much as we can the controllerAs syntax for
+     * every View-Model attributes (check out the this.attrs in the controllers
+     * body). But, since we need to support Angular 1.2.*, then we need
+     * to bind ngModel the isolated Scope of the directive to achieve
+     * two way data binding.
+     *
+     */
     function controller($scope, getTzList, filterTzByRegion) {
 
         this.selectedRegion = 'America';
@@ -128,10 +155,6 @@
         var tzList = getTzList().tzList;
 
         this.getTzListForRegion = filterTzByRegion(tzList);
-
-
-        //explain why ngModel in the tpl is used with the scope instead of the ctrl
-
     }
 
 }) ();
@@ -139,21 +162,30 @@
 (function() {
 
     angular.module('pctDate.timezoneSelector.directive', [
-        //Auto generated template module for testing and distribution purporses
+        //Auto generated template module for testing and distribution purposes
         'pctDate.templates',
         'pctDate.timezoneSelector.controller'
         ])
         .directive('pctTimezoneSelector', directiveDef);
 
 
+    /**
+     * @ngdoc directive
+     * @name pctTimezoneSelector
+     * @description
+     * Reusable component-like directive to select Time Zones.
+     * It is well suited for angular forms.
+     *
+     * Attribute / parameters
+     * - ngModel: the angular model to use. It will be two way data bind.
+     * - class: The directive is smart enough to apply the same classes applied to the
+     *     custom element to the inner select elements. Feel free to use any bootstrap
+     *     or any other framework or custom css classes.
+     *
+     *
+     */
     function directiveDef() {
 
-
-
-
-        function link(scope, element, attrs, ngModelCtrl) {
-
-        }
 
         return {
             restrict: 'E',
@@ -161,11 +193,16 @@
             controller: '_pctTimezoneSelectorDirectiveController',
             controllerAs: 'ctrl',
             templateUrl: 'src/timezoneSelector/timezoneSelector.tpl.html',
-            link: link,
 
-            //TODO: explain why we use two way data binding for ngModel (=) and text binding
-            //for class (@)
-            //https://umur.io/angularjs-directives-using-isolated-scope-with-attributes/
+            // Here we are binding in two different ways the directive attributes:
+            //
+            // - ngModel is bind with `=` because we need it to two way data bind.
+            // - class is bind with `@` because we are only interested in the text, which
+            //      represents the css classes applied to the elements.
+            //
+            // For more information check the angular official doc or this nice
+            // post about it
+            // https://umur.io/angularjs-directives-using-isolated-scope-with-attributes/
             scope: {
                 ngModel: '=ngModel',
                 clazz: '@class'
@@ -180,6 +217,13 @@
 
 (function() {
 
+    /**
+     * @ngdoc module
+     * @name pctDate.timezoneSelector
+     * @description
+     * Module for the timezone Selector directive
+     *
+     */
     angular.module('pctDate.timezoneSelector', [
             'pctDate.timezoneSelector.directive'
         ]);
@@ -194,6 +238,25 @@
         .factory('filterTzByRegion', factory);
 
 
+    /**
+     *
+     * @ngdoc service
+     * @name filterTzByRegionFactory
+     * @description
+     * Factory function that returns a utility method that filters
+     * a given Time Zone Parsed list (see parseTzIdList)
+     * by a given Region.
+     *
+     * This method is mostly used for displaying the two select
+     * directive that correspond to the Time Zone selector.
+     *
+     *
+     * @param {Array} tzList: Array of Parsed Time Zone Ids
+     * @returns {Function}
+     *
+     *
+     *
+     */
     function factory() {
 
 
@@ -204,6 +267,16 @@
             }
 
 
+            /**
+             *
+             * @name filterTzByRegion
+             * @description
+             * Filter the tzList inside the closure by the selectedRegion parameter
+             *
+             * @param {String} selectedRegion
+             * @returns {Array}: subset of tzList, filtered by the selectedRegion param
+             *
+             */
             return function filterTzByRegion(selectedRegion) {
                 return tzList.filter(function(element) {
                     return element.region === selectedRegion
@@ -220,6 +293,7 @@
 })();
 
 (function() {
+    'use strict';
 
 
     angular.module('pctDate.utils.tzId.getTzList', [
@@ -232,14 +306,44 @@
 
     factory.$inject = ['moment', 'parseTzIdList', 'removeTzIdSpecialCases'];
 
-    //TODO: check that moment timezone is loaded
+    /**
+     *
+     * @ngdoc service
+     * @name getTzList
+     *
+     * @returns {Object}
+     *
+     * @description
+     * The main purpose of this function is to read all the Time Zones
+     * loaded inside Moment-timezone.js, filter special cases and
+     * create and return a data structure.
+     *
+     * This function will return an object containing two attributes
+     * - regionList: contains a set of regions (none repeated).
+     * - tzList: a list of Time Zones data structures (id, region and subregion fields)
+     *
+     *
+     * It's handy to know that Time Zone Ids have the form of:
+     * "Region/SubRegion"
+     *
+     * for example:
+     * "Europe/Rome"
+     *
+     * @requires pctMoment
+     *
+     */
     function factory(moment, parseTzIdList, removeTzIdSpecialCases) {
-        //http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/
+        //TODO: check that moment timezone is loaded
+
+
+
+        //For more information about what this method returns check out
+        //its API doc: http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/
         var tzListRaw = moment.tz.names();
 
         var aux = parseTzIdList(removeTzIdSpecialCases(tzListRaw));
         var tzRegionList = aux[0];
-        var tzList = aux[1]
+        var tzList = aux[1];
 
         return function getTzList() {
 
@@ -258,7 +362,30 @@
     angular.module('pctDate.utils.tzId.parseTzId', [])
         .factory('parseTzId', factory);
 
+
+
+
+    /**
+     * @ngdoc service
+     * @name parseTzId
+     *
+     * @description
+     * Parse a given Time Zone Id and return an
+     * object with semantic fields:
+     * - id: Time Zone Id ("Region/SubRegion")
+     * - region: region part of the ID
+     * - subregion: subregion part of the ID
+     *
+     * The objective of this function is to
+     * provide help when manipulating Time Zone Ids.
+     *
+     *
+     * @param {String} tzId
+     * @returns {Object}
+     *
+     */
     function factory() {
+        //TODO: Check that tzId is a valid timezone Id
         var aux;
 
         return function(tzId) {
@@ -287,13 +414,55 @@
 
     factory.$inject = ['parseTzId']
 
+
+
+
+    /**
+     *
+     * @ngdoc service
+     * @name parseTzIdList
+     * @description
+     * The objective of this function is to process an Array of
+     * Time Zone Ids (typically extracted from Moment's API) and
+     * return an array of Time Zone Ids data structures (see parseTzId service)
+     * and to return an array of Time Zone Regions (without repeats).
+     *
+     * Inside this function we take a mix approach to accomplish
+     * performance since we are processing an array of 500 elements roughly.
+     *
+     * We use a kind of hash unique search algorithm, thats why you will see
+     * a `seen` object to remember which Regions are already being returned.
+     *
+     * This function uses a semi weird pattern which is return an array
+     * of two rather independent data structures. This is done basically to
+     * only traverse the Id array only once and thus increase performance.
+     * Also, we have been reading a lot of ES6 material and this will be fantastic
+     * with destructured assignment, [x, y] = [1,2];
+     *
+     *
+     * @param {Array of String} tzListRaw (String Time Zone Id array)
+     * @returns {Array}
+     *
+     * Details about the return value:
+     *
+     * - return_value[0]: its a Region Set (no duplicated values)
+     * - return_value[1]: the parsed Time Zone Ids list
+     *
+     *
+     *
+     */
     function factory(parseTzId) {
 
         return function parseTzIdList(tzListRaw) {
 
             var tzList = [];
             var regionList = [];
+
+
+            //To keep track of repeated Region values
             var seen = {};
+
+
             var len = tzListRaw.length;
             var i, aux;
 
@@ -327,6 +496,29 @@
         .factory('removeTzIdSpecialCases', factory);
 
 
+    /**
+     * @ngdoc service
+     * @name removeTzIdSpecialCases
+     * @description
+     * This function takes a list of timezone id strings
+     * (typically gotten from moment API) and filters out
+     * the weird, historically only, time zone Ids.
+     *
+     * This function will exclude:
+     *
+     * - All TzIDs that don't have the form: "Region/SubRegion[/SubSubRegion]"
+     *
+     *
+     * We might add more exclusion rules in the future.
+     *
+     *
+     *
+     *
+     * @param {Array of String} tzListRaw (Array of String Time Zone ids)
+     * @returns {Array of String} (Filtered Array of String Time Zone ids)
+     *
+     *
+     */
     function factory() {
 
         return function removeTzIdSpecialCases(tzListRaw) {
@@ -342,6 +534,19 @@
 
 (function() {
 
+    /*
+     * @ngdoc module
+     * @name pctDate.utils.tzId
+     *
+     *
+     * @description
+     * This module contains a couple of useful
+     * services to interact with Time Zone Ids,
+     * for example "Europe/Rome" and with lists
+     * of Time Zone ids
+     *
+     *
+     */
     angular.module('pctDate.utils.tzId', [
             'pctDate.utils.tzId.parseTzId',
             'pctDate.utils.tzId.parseTzIdList',

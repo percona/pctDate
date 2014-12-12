@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="pctDate.timezoneSelector">
+<head>
+
+</head>
+
+<body>
+
+</body ng-init="test=''">
+
+
+    <input type=text ng-model="test">
+    <pct-timezone-selector ng-model="test" class="some-class other-class"></pct-timezone-selector>
+
+    <style>
+        .some-class {
+            line-height: 30px;
+        }
+    
+    </style>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/moment/min/moment.min.js"></script>
+    <script src="bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.min.js"></script>
+    <script src="bower_components/pct-moment/dist/pctMoment.js"></script>
+    <script src="dist/pctDate.js"></script>
+</html>
