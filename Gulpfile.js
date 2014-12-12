@@ -13,6 +13,7 @@ var $ = require('gulp-load-plugins')();
 var DIR = {
     src: 'src/**/!(*.spec).js',
     test: 'src/**/*.spec.js',
+    templates: 'src/**/*.tpl.html',
     karma:{
         plain: 'karma.conf.plain.js',
         minified: 'karma.conf.minified.js'
@@ -88,6 +89,20 @@ gulp.task('continuous', [
     ]);
 
 
+var templateCacheOptions = {
+
+                    root: 'src/',
+                    module: 'pctDate.templates',
+                    standalone: true
+        };
+
+
+gulp.task('templates', function() {
+    return gulp.src(DIR.templates)
+            .pipe($.angularTemplatecache('templates.js', templateCacheOptions))
+            .pipe(gulp.dest(DIR.dist));
+});
+
 
 /*
  * Build pctMoment.js and pctMoment.min.js
@@ -97,7 +112,8 @@ gulp.task('continuous', [
  *
  */
 gulp.task('dist', ['clean:dist'], function() {
-    return gulp.src(DIR.src)
+    return gulp.src([DIR.src, DIR.templates])
+        .pipe($.if('*.tpl.html', $.angularTemplatecache(templateCacheOptions)))
         .pipe($.concat(distName + '.js'))
         .pipe(gulp.dest(DIR.dist))
         .pipe($.uglify())
