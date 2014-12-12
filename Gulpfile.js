@@ -18,6 +18,9 @@ var DIR = {
         plain: 'karma.conf.plain.js',
         minified: 'karma.conf.minified.js'
     },
+    otherVendor: [
+        'other_vendor/jstimezonedetect/jstz.min.js'
+    ],
     gulp: 'Gulpfile.js',
 
     dist: 'dist/'
@@ -116,12 +119,26 @@ gulp.task('templates', function() {
  *
  */
 gulp.task('dist', ['clean:dist'], function() {
-    return gulp.src([DIR.src, DIR.templates])
+    //Grab all the sources! Lib src, templates and otherVendors
+    return gulp.src([].concat(DIR.src, DIR.templates, DIR.otherVendor))
+
+        // Convert Angular html templates into Js strings in the $templateCache service
         .pipe($.if('*.tpl.html', $.angularTemplatecache(templateCacheOptions)))
+
+        //Concat everything in a single file
         .pipe($.concat(distName + '.js'))
+
+        // Move a copy of the single file into dist
         .pipe(gulp.dest(DIR.dist))
+
+        // Minify
         .pipe($.uglify())
+
+        // Rename
         .pipe($.rename(distName + '.min.js'))
+
+        // Create a second minified copy of the original
+        // concatenated file
         .pipe(gulp.dest(DIR.dist));
 });
 

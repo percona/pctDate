@@ -10,6 +10,7 @@ var files = {};
 
 
 files.libs = [
+    'other_vendor/jstimezonedetect/jstz.min.js',
     'bower_components/jquery/jquery.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-mocks/angular-mocks.js',
