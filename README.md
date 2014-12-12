@@ -30,10 +30,23 @@ bower install --save pct-date
 
 ## How to use it
 
-For now we only expose two function helpers:
+### Function helpers
 
 - [isDate](src/isDate.service.js): evaluate is a given input is a Valid JS Date object
 - [toUnixTs](src/toUnixTs.service.js): converts a Js Date object to Unix Time Stamp
+
+
+### Directives
+
+pctTimezoneSelector directive!
+
+This directive is a reusable component to select timezones.
+You can also use the inner API for other reasons, check out its
+[inline docs](src/utils/tzId)
+
+```html
+<pct-timezone-selector ngModel="model" class="c1 c2 c3 ..."></pct-timezone-selector>
+```
 
 ## Contribute
 
