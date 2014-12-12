@@ -1,38 +1,54 @@
-(function() {
+describe('pctDate.timezoneSelector.controller module', function() {
+    'use strict';
 
-    angular.module('pctDate.timezoneSelector', ['pctMoment'])
-        .directive('pctTimezoneSelector', directiveDef);
-
-
-    function directiveDef(moment) {
+    var ctrl, getTzListMock, filterTzByRegionMock;
 
 
-        //TODO: check that moment timezone is loaded
+    beforeEach(module('pctDate.timezoneSelector.controller'));
 
 
-        function link(scope, element, attrs, ngModelCtrl) {
-            //http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/
-            scope.timezoneList = moment.tz.names();
+    beforeEach(inject(function($injector, $controller) {
 
-        }
+        getTzListMock = jasmine.createSpy('getTzList')
+                                .and.returnValue({
+                                    regionList: 'regionList',
+                                    tzList: 'tzList'
+                                });
 
-        return {
-            restrict: 'E',
-            require: 'ngModel',
-            templateUrl: 'src/timezoneSelector/timezoneSelector.tpl.html',
-            link: link,
+        filterTzByRegionMock = jasmine.createSpy('filterTzByRegion');
 
-            //TODO: explain why we use two way data binding for ngModel (=) and text binding
-            //for class (@)
-            //https://umur.io/angularjs-directives-using-isolated-scope-with-attributes/
-            scope: {
-                ngModel: '=ngModel',
-                clazz: '@class'
-            }
+        ctrl = $controller('_pctTimezoneSelectorDirectiveController', {
+            $scope:  $injector.get('$rootScope').$new(),
+            getTzList: getTzListMock,
+            filterTzByRegion: filterTzByRegionMock
+        })
 
-        }
-    }
+    }));
 
 
+    it('should set the selectedRegion as "America" by default', function() {
 
-}) ();
+        expect(ctrl.selectedRegion).toBe('America');
+
+    });
+
+
+    it('should use getTzList service to populate its own tzRegionList attribute', function() {
+
+        expect(getTzListMock).toHaveBeenCalled()
+
+        expect(ctrl.tzRegionList).toBe('regionList');
+
+    });
+
+
+    it('should set its attr getTzListForRegion from an external service', function() {
+
+        expect(filterTzByRegionMock).toHaveBeenCalled();
+
+    });
+
+
+
+
+});
