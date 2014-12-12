@@ -10,6 +10,7 @@ var files = {};
 
 
 files.libs = [
+    'bower_components/jquery/jquery.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-mocks/angular-mocks.js',
     'bower_components/moment/moment.js',
@@ -23,7 +24,7 @@ files.libs = [
 files.tests = 'src/**/*.spec.js';
 
 
-files.srcPlain = 'src/**/!(*.spec).js';
+files.srcPlain = ['src/**/!(*.spec).js', 'src/**/*.tpl.html'];
 
 
 files.srcMinified = 'dist/*.min.js';
