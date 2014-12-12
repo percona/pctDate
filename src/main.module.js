@@ -18,8 +18,7 @@
      */
     angular.module('pctDate', [
         'pctDate.toUnixTs',
-        'pctDate.isDate',
-        'pctDate.utils.tzId'
+        'pctDate.isDate'
     ]);
 
 }) ();
