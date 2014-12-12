@@ -1,6 +1,8 @@
 (function() {
 
     angular.module('pctDate.timezoneSelector.directive', [
+        //Auto generated template module for testing and distribution purporses
+        'pctDate.templates',
         'pctDate.timezoneSelector.controller'
         ])
         .directive('pctTimezoneSelector', directiveDef);

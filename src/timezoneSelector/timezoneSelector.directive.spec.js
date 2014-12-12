@@ -13,7 +13,7 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
 
     beforeEach(function() {
-        element = $compile('<pct-timezone-selector class="c1 c2"></pct-timezone-selector>')($rootScope);
+        element = $compile('<pct-timezone-selector ng-model="model"  class="c1 c2"></pct-timezone-selector>')($rootScope);
         $rootScope.$digest();
     })
 
@@ -34,12 +34,12 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
         isolateScope.ngModel = 'test';
         $rootScope.$digest();
-        expect($rootScope.ngModel).toEqual(isolateScope.ngModel);
+        expect($rootScope.model).toEqual(isolateScope.ngModel);
 
 
-        $rootScope.ngModel = 'test2';
+        $rootScope.model = 'test2';
         $rootScope.$digest();
-        expect(isolateScope.ngModel).toEqual($rootScope.ngModel);
+        expect(isolateScope.ngModel).toEqual($rootScope.model);
     });
 
 });
