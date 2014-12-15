@@ -19,6 +19,7 @@
     angular.module('pctDate', [
         'pctDate.toUnixTs',
         'pctDate.isDate',
+        'pctDate.timezoneSelector',
         'pctDate.utils.jsTzDetect'
     ]);
 
