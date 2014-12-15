@@ -2,13 +2,15 @@
     'use strict';
 
     angular.module('pctDate.timezoneSelector.controller', [
-        'pctDate.utils.tzId'
+        'pctDate.utils.tzId',
+        'pctDate.utils.jsTzDetect',
+        'pctDate.utils.tzId.parseTzId'
         ])
         .controller('_pctTimezoneSelectorDirectiveController', controller);
 
 
 
-    controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion']
+    controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion', 'jsTzDetect', 'parseTzId'];
 
 
 
@@ -38,9 +40,15 @@
      * two way data binding.
      *
      */
-    function controller($scope, getTzList, filterTzByRegion) {
+    function controller($scope, getTzList, filterTzByRegion, jstz, parseTzId) {
 
-        this.selectedRegion = 'America';
+
+        var tz = jstz.determine(); // Determines the time zone of the browser client
+        var autodetectedtz = parseTzId(tz.name());
+
+
+        this.selectedRegion = autodetectedtz.region;
+        $scope.ngModel = tz.name();
 
         this.tzRegionList = getTzList().regionList;
 
