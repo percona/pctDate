@@ -112,15 +112,14 @@
     'use strict';
 
     angular.module('pctDate.timezoneSelector.controller', [
-        'pctDate.utils.tzId'
+        'pctDate.utils.tzId',
+        'pctDate.utils.jsTzDetect',
+        'pctDate.utils.tzId.parseTzId'
         ])
         .controller('_pctTimezoneSelectorDirectiveController', controller);
 
 
-
-    controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion']
-
-
+    controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion', 'jsTzDetect', 'parseTzId'];
 
     /**
      * @ngdoc controller
@@ -148,9 +147,17 @@
      * two way data binding.
      *
      */
-    function controller($scope, getTzList, filterTzByRegion) {
+    function controller($scope, getTzList, filterTzByRegion, jstz, parseTzId) {
 
-        this.selectedRegion = 'America';
+
+        //Use js timezone detect javascript library to auto detect the current
+        //user's timezone.
+        var autodetectedTz = parseTzId(jstz.determine().name());
+
+        //Use that auto detected Time Zone as the default
+        //(already selected) option in the time zone selection directive
+        this.selectedRegion = autodetectedTz.region;
+        $scope.ngModel = autodetectedTz.id;
 
         this.tzRegionList = getTzList().regionList;
 
@@ -329,13 +336,16 @@
 
     angular.module('pctDate.utils.tzId.getTzList', [
             'pctMoment',
-            'pctDate.utils.tzId.parseTzIdList',
-            'pctDate.utils.tzId.removeTzIdSpecialCases'
+            'pctDate.utils.tzId.parseTzIdList'
         ])
         .factory('getTzList', factory);
 
 
-    factory.$inject = ['moment', 'parseTzIdList', 'removeTzIdSpecialCases'];
+    factory.$inject = [
+        'moment',
+        'isMomentTimezoneLoaded',
+        'parseTzIdList'
+    ];
 
     /**
      *
@@ -363,16 +373,19 @@
      * @requires pctMoment
      *
      */
-    function factory(moment, parseTzIdList, removeTzIdSpecialCases) {
-        //TODO: check that moment timezone is loaded
+    function factory(moment, isMomentTimezoneLoaded, parseTzIdList) {
 
-
+        // Since this factory depends on moment-timezone, assert that it has been loaded
+        // correctly
+        if (!isMomentTimezoneLoaded()) {
+            throw new ReferenceError('pctDate.getTzList: please include moment-timezone.js files');
+        }
 
         //For more information about what this method returns check out
         //its API doc: http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/
         var tzListRaw = moment.tz.names();
 
-        var aux = parseTzIdList(removeTzIdSpecialCases(tzListRaw));
+        var aux = parseTzIdList(tzListRaw);
         var tzRegionList = aux[0];
         var tzList = aux[1];
 
@@ -382,6 +395,58 @@
                 regionList: aux[0],
                 tzList: aux[1]
             }
+        }
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('pctDate.utils.tzId.isTzSpecialCase', [])
+        .factory('isTzSpecialCase', isTzSpecialCaseFactory);
+
+
+    isTzSpecialCaseFactory.$inject = [];
+
+
+
+    /**
+     * @ngdoc service
+     * @name isTzSpecialCase
+     * @description
+     * Simple helper function that evaluates parsedTz
+     * data structure (see parseTzId service) and
+     * returns true if they are considered special cases.
+     *
+     * The criteria behind special cases is mostly related
+     * to special, historically only relevant, timezone ids.
+     *
+     * The following Time Zones will be considered as special cases:
+     *
+     * - 'Region' (empty subregion)
+     * - 'Brazil/Subregion'
+     * - 'Chile/Subregion'
+     * - 'Mexico/Subregion'
+     *
+     * Where Region and Subregion could be any string representing them
+     * such as Brazil, Chile, Mexico, America, Africa for Region and
+     * Montevideo, Los Angeles, Rome, for subregion.
+     *
+     * @param {Object} parsedTz (see parseTzId service)
+     * @returns {Boolean}
+     *
+     */
+    function isTzSpecialCaseFactory() {
+
+        return function isTzSpecialCase(parsedTz) {
+            var region = parsedTz.region;
+            var subregion = parsedTz.subregion;
+
+            return !subregion ||
+                region === 'Brazil' ||
+                region === 'Chile' ||
+                region === 'Mexico';
         }
     }
 
@@ -417,16 +482,26 @@
      */
     function factory() {
         //TODO: Check that tzId is a valid timezone Id
-        var aux;
+        var aux, subregion;
 
         return function(tzId) {
-            aux = tzId.match(/(^[^\/]*)\/(.*)/);
+            aux = tzId.match(/(^[^\/]*)\/?(.*)/);
+
+
+            subregion = aux[2];
+
+            // subregions might be empty
+            if (subregion) {
+                // Make the subregion be more human friendly
+                subregion = subregion.replace('_', ' ')
+                    .replace('/', ' / ');
+            }
 
             return {
 
                 id: tzId,
                 region: aux[1],
-                subregion: aux[2]
+                subregion: subregion
             };
         }
     }
@@ -437,13 +512,14 @@
     'use strict';
 
     angular.module('pctDate.utils.tzId.parseTzIdList', [
-            'pctDate.utils.tzId.parseTzId'
+            'pctDate.utils.tzId.parseTzId',
+            'pctDate.utils.tzId.isTzSpecialCase'
         ])
         .factory('parseTzIdList', factory);
 
 
 
-    factory.$inject = ['parseTzId']
+    factory.$inject = ['parseTzId', 'isTzSpecialCase'];
 
 
 
@@ -482,7 +558,9 @@
      *
      *
      */
-    function factory(parseTzId) {
+    function factory(parseTzId, isTzSpecialCase) {
+
+
 
         return function parseTzIdList(tzListRaw) {
 
@@ -502,6 +580,14 @@
 
                 var parsedTz = parseTzId(tzListRaw[i]);
 
+
+                //If the timezone is a "special case" then
+                //dont include it on the return array
+                if (isTzSpecialCase(parsedTz)) {
+                    continue;
+                }
+
+
                 tzList.push(parsedTz)
 
                 if (!seen.hasOwnProperty(parsedTz.region)) {
@@ -516,50 +602,6 @@
             return [regionList, tzList];
         }
     }
-
-})();
-
-(function() {
-    'use strict';
-
-
-    angular.module('pctDate.utils.tzId.removeTzIdSpecialCases', [])
-        .factory('removeTzIdSpecialCases', factory);
-
-
-    /**
-     * @ngdoc service
-     * @name removeTzIdSpecialCases
-     * @description
-     * This function takes a list of timezone id strings
-     * (typically gotten from moment API) and filters out
-     * the weird, historically only, time zone Ids.
-     *
-     * This function will exclude:
-     *
-     * - All TzIDs that don't have the form: "Region/SubRegion[/SubSubRegion]"
-     *
-     *
-     * We might add more exclusion rules in the future.
-     *
-     *
-     *
-     *
-     * @param {Array of String} tzListRaw (Array of String Time Zone ids)
-     * @returns {Array of String} (Filtered Array of String Time Zone ids)
-     *
-     *
-     */
-    function factory() {
-
-        return function removeTzIdSpecialCases(tzListRaw) {
-            return tzListRaw.filter(function(el) {
-
-                return /^[^\/]+\/.+/.test(el)
-            });
-        };
-
-    };
 
 })();
 
@@ -581,7 +623,6 @@
     angular.module('pctDate.utils.tzId', [
             'pctDate.utils.tzId.parseTzId',
             'pctDate.utils.tzId.parseTzIdList',
-            'pctDate.utils.tzId.removeTzIdSpecialCases',
             'pctDate.utils.tzId.filterTzByRegion',
             'pctDate.utils.tzId.getTzList'
         ]);
