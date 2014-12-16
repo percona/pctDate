@@ -94,10 +94,10 @@ gulp.task('continuous', [
 
 var templateCacheOptions = {
 
-                    root: 'src/',
-                    module: 'pctDate.templates',
-                    standalone: true
-        };
+        root: 'src/',
+        module: 'pctDate.templates',
+        standalone: true
+    };
 
 
 gulp.task('templates', function() {
