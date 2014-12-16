@@ -25,6 +25,8 @@ Download it with bower:
 bower install --save pct-date
 ```
 
+
+Include it in your site
 ```html
 <!-- dependencies -->
 <script src="angular.js"></script>
@@ -43,6 +45,7 @@ Check it out for more information about what versions of Moment.js are supported
 and additional docs.
 
 
+Include it in your Angular app
 ```javascript
 angular.module('myApp', ['pctDate']);
 ```
