@@ -30,4 +30,14 @@ describe('pctDate.utils.tzId.parseTzId module', function() {
         expect(result.region).toBe('America'),
         expect(result.subregion).toBe('Argentina / Buenos Aires');
     });
+
+
+    it('should handle correctly region only special cases', function() {
+        var id = 'Kongo';
+        var result = parseTzId(id);
+
+        expect(result.id).toBe(id);
+        expect(result.region).toBe('Kongo'),
+        expect(result.subregion).toBeFalsy();
+    });
 });

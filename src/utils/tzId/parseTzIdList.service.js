@@ -2,13 +2,14 @@
     'use strict';
 
     angular.module('pctDate.utils.tzId.parseTzIdList', [
-            'pctDate.utils.tzId.parseTzId'
+            'pctDate.utils.tzId.parseTzId',
+            'pctDate.utils.tzId.isTzSpecialCase'
         ])
         .factory('parseTzIdList', factory);
 
 
 
-    factory.$inject = ['parseTzId']
+    factory.$inject = ['parseTzId', 'isTzSpecialCase'];
 
 
 
@@ -47,7 +48,9 @@
      *
      *
      */
-    function factory(parseTzId) {
+    function factory(parseTzId, isTzSpecialCase) {
+
+
 
         return function parseTzIdList(tzListRaw) {
 
@@ -66,6 +69,14 @@
             for (i = 0; i < len; i++) {
 
                 var parsedTz = parseTzId(tzListRaw[i]);
+
+
+                //If the timezone is a "special case" then
+                //dont include it on the return array
+                if (isTzSpecialCase(parsedTz)) {
+                    continue;
+                }
+
 
                 tzList.push(parsedTz)
 

@@ -31,16 +31,17 @@
         var aux, subregion;
 
         return function(tzId) {
-            aux = tzId.match(/(^[^\/]*)\/(.*)/);
+            aux = tzId.match(/(^[^\/]*)\/?(.*)/);
 
 
-            // Make the subregion be more human friendly
-            // by replacing '_' with simple spaces
-            // and '/' for ' / '.
             subregion = aux[2];
-            subregion = subregion.replace('_', ' ')
-                .replace('/', ' / ');
 
+            // subregions might be empty
+            if (subregion) {
+                // Make the subregion be more human friendly
+                subregion = subregion.replace('_', ' ')
+                    .replace('/', ' / ');
+            }
 
             return {
 

@@ -4,13 +4,16 @@
 
     angular.module('pctDate.utils.tzId.getTzList', [
             'pctMoment',
-            'pctDate.utils.tzId.parseTzIdList',
-            'pctDate.utils.tzId.removeTzIdSpecialCases'
+            'pctDate.utils.tzId.parseTzIdList'
         ])
         .factory('getTzList', factory);
 
 
-    factory.$inject = ['moment', 'parseTzIdList', 'removeTzIdSpecialCases'];
+    factory.$inject = [
+        'moment',
+        'isMomentTimezoneLoaded',
+        'parseTzIdList'
+    ];
 
     /**
      *
@@ -38,16 +41,19 @@
      * @requires pctMoment
      *
      */
-    function factory(moment, parseTzIdList, removeTzIdSpecialCases) {
-        //TODO: check that moment timezone is loaded
+    function factory(moment, isMomentTimezoneLoaded, parseTzIdList) {
 
-
+        // Since this factory depends on moment-timezone, assert that it has been loaded
+        // correctly
+        if (!isMomentTimezoneLoaded) {
+            throw new ReferenceError('pctDate.getTzList: please include moment-timezone.js files');
+        }
 
         //For more information about what this method returns check out
         //its API doc: http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/
         var tzListRaw = moment.tz.names();
 
-        var aux = parseTzIdList(removeTzIdSpecialCases(tzListRaw));
+        var aux = parseTzIdList(tzListRaw);
         var tzRegionList = aux[0];
         var tzList = aux[1];
 
