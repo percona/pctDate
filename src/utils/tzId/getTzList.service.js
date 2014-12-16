@@ -45,7 +45,7 @@
 
         // Since this factory depends on moment-timezone, assert that it has been loaded
         // correctly
-        if (!isMomentTimezoneLoaded) {
+        if (!isMomentTimezoneLoaded()) {
             throw new ReferenceError('pctDate.getTzList: please include moment-timezone.js files');
         }
 
