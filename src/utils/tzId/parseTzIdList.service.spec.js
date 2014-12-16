@@ -38,7 +38,7 @@ describe('pctDate.utils.tzId.parseTzIdList module', function() {
         expect(parsedList.length).toBe(3);
         expect(parsedList[1].id).toBe('America/Argentina/Buenos_Aires');
         expect(parsedList[1].region).toBe('America');
-        expect(parsedList[1].subregion).toBe('Argentina/Buenos_Aires');
+        expect(parsedList[1].subregion).toBe('Argentina / Buenos Aires');
 
     });
 });

@@ -43,6 +43,6 @@ describe('pctDate.utils.tzId.getTzList module', function() {
 
         expect(tzList.length).toBe(3);
         expect(tzList[1].region).toBe('America');
-        expect(tzList[1].subregion).toBe('Argentina/Buenos_Aires');
+        expect(tzList[1].subregion).toBe('Argentina / Buenos Aires');
     });
 });

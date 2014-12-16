@@ -17,7 +17,7 @@ describe('pctDate.utils.tzId.parseTzId module', function() {
 
         expect(result.id).toBe(id);
         expect(result.region).toBe('America'),
-        expect(result.subregion).toBe('Los_Angeles');
+        expect(result.subregion).toBe('Los Angeles');
     });
 
 
@@ -28,6 +28,6 @@ describe('pctDate.utils.tzId.parseTzId module', function() {
 
         expect(result.id).toBe(id);
         expect(result.region).toBe('America'),
-        expect(result.subregion).toBe('Argentina/Buenos_Aires');
+        expect(result.subregion).toBe('Argentina / Buenos Aires');
     });
 });

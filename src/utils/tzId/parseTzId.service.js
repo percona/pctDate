@@ -28,16 +28,25 @@
      */
     function factory() {
         //TODO: Check that tzId is a valid timezone Id
-        var aux;
+        var aux, subregion;
 
         return function(tzId) {
             aux = tzId.match(/(^[^\/]*)\/(.*)/);
+
+
+            // Make the subregion be more human friendly
+            // by replacing '_' with simple spaces
+            // and '/' for ' / '.
+            subregion = aux[2];
+            subregion = subregion.replace('_', ' ')
+                .replace('/', ' / ');
+
 
             return {
 
                 id: tzId,
                 region: aux[1],
-                subregion: aux[2]
+                subregion: subregion
             };
         }
     }
