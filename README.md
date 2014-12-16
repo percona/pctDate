@@ -40,9 +40,6 @@ Include it in your site
 ```
 
 
-**Note:** pctDate depends on [pctMoment](https://github.com/percona/pctMoment). 
-Check it out for more information about what versions of Moment.js are supported
-and additional docs.
 
 
 Include it in your Angular app
@@ -50,6 +47,10 @@ Include it in your Angular app
 angular.module('myApp', ['pctDate']);
 ```
 
+**Note:** pctDate depends on [pctMoment](https://github.com/percona/pctMoment). 
+Check it out for more information about what versions of Moment.js are supported
+and additional docs.
+ 
 
 # API and Guide
 
