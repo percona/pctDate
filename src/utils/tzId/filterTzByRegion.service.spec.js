@@ -15,7 +15,7 @@ describe('pctDate.utils.tzId.filterTzByRegion module', function() {
         var tzList = [
             {id:'America/Los_Angeles', region: 'America', subregion: 'Los_Angeles'},
             {id: 'Europe/Rome', region: 'Europe', subregion: 'Rome'}
-        ]
+        ];
 
         var filter = filterTzByRegion(tzList);
 
@@ -23,6 +23,11 @@ describe('pctDate.utils.tzId.filterTzByRegion module', function() {
         expect(angular.isFunction(filter)).toBe(true);
         expect(filter('America')).toEqual([{id:'America/Los_Angeles', region: 'America', subregion: 'Los_Angeles'}]);
         expect(filter('Europe')).toEqual([{id: 'Europe/Rome', region: 'Europe', subregion: 'Rome'}]);
+    });
+
+
+    it('should throw and error when the @param is not an array', function() {
+        expect(filterTzByRegion('not an array')).toThrow();
     });
 });
 
