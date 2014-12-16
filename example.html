@@ -2,6 +2,8 @@
 <html ng-app="pctDate">
 <head>
 
+    <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css">
+
 </head>
 
 <body>
@@ -9,8 +11,27 @@
 </body ng-init="test=''">
 
 
-    <input type=text ng-model="test">
-    <pct-timezone-selector ng-model="test" class="some-class other-class"></pct-timezone-selector>
+    <input type=text ng-model="test" style="width: 300px;">
+
+  <p>
+            Select your timezone! 
+            We will attemp to guess the right one for you!
+        </p>  
+
+    <form class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label">Time Zone</label>
+            <div class="controls">
+
+
+
+                <pct-timezone-selector ng-model="test" class="input-xlarge"></pct-timezone-selector
+
+>
+            </div>
+        </div>
+    </form>
+
 
     <style>
         .some-class {
