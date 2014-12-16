@@ -27,7 +27,7 @@ describe('pctDate.utils.tzId.filterTzByRegion module', function() {
 
 
     it('should throw and error when the @param is not an array', function() {
-        expect(filterTzByRegion('not an array')).toThrow();
+        expect(function() { filterTzByRegion('not an array') }).toThrow();
     });
 });
 
