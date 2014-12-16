@@ -13,10 +13,14 @@ var $ = require('gulp-load-plugins')();
 var DIR = {
     src: 'src/**/!(*.spec).js',
     test: 'src/**/*.spec.js',
+    templates: 'src/**/*.tpl.html',
     karma:{
         plain: 'karma.conf.plain.js',
         minified: 'karma.conf.minified.js'
     },
+    otherVendor: [
+        'other_vendor/jstimezonedetect/jstz.min.js'
+    ],
     gulp: 'Gulpfile.js',
 
     dist: 'dist/'
@@ -88,6 +92,20 @@ gulp.task('continuous', [
     ]);
 
 
+var templateCacheOptions = {
+
+        root: 'src/',
+        module: 'pctDate.templates',
+        standalone: true
+    };
+
+
+gulp.task('templates', function() {
+    return gulp.src(DIR.templates)
+            .pipe($.angularTemplatecache('templates.js', templateCacheOptions))
+            .pipe(gulp.dest(DIR.dist));
+});
+
 
 /*
  * Build pctMoment.js and pctMoment.min.js
@@ -95,13 +113,32 @@ gulp.task('continuous', [
  * Respectively, these files are the concatenated
  * version of the lib and the minified version
  *
+ *
+ * In this task we are also processing html angular
+ * templates into Angular's template Cache
+ *
  */
 gulp.task('dist', ['clean:dist'], function() {
-    return gulp.src(DIR.src)
+    //Grab all the sources! Lib src, templates and otherVendors
+    return gulp.src([].concat(DIR.src, DIR.templates, DIR.otherVendor))
+
+        // Convert Angular html templates into Js strings in the $templateCache service
+        .pipe($.if('*.tpl.html', $.angularTemplatecache(templateCacheOptions)))
+
+        //Concat everything in a single file
         .pipe($.concat(distName + '.js'))
+
+        // Move a copy of the single file into dist
         .pipe(gulp.dest(DIR.dist))
+
+        // Minify
         .pipe($.uglify())
+
+        // Rename
         .pipe($.rename(distName + '.min.js'))
+
+        // Create a second minified copy of the original
+        // concatenated file
         .pipe(gulp.dest(DIR.dist));
 });
 
