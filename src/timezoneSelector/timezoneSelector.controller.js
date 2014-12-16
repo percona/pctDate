@@ -9,10 +9,7 @@
         .controller('_pctTimezoneSelectorDirectiveController', controller);
 
 
-
     controller.$inject = ['$scope', 'getTzList', 'filterTzByRegion', 'jsTzDetect', 'parseTzId'];
-
-
 
     /**
      * @ngdoc controller
@@ -43,12 +40,14 @@
     function controller($scope, getTzList, filterTzByRegion, jstz, parseTzId) {
 
 
-        var tz = jstz.determine(); // Determines the time zone of the browser client
-        var autodetectedtz = parseTzId(tz.name());
+        //Use js timezone detect javascript library to auto detect the current
+        //user's timezone.
+        var autodetectedTz = parseTzId(jstz.determine().name());
 
-
-        this.selectedRegion = autodetectedtz.region;
-        $scope.ngModel = tz.name();
+        //Use that auto detected Time Zone as the default
+        //(already selected) option in the time zone selection directive
+        this.selectedRegion = autodetectedTz.region;
+        $scope.ngModel = autodetectedTz.id;
 
         this.tzRegionList = getTzList().regionList;
 
