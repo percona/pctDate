@@ -41,7 +41,8 @@ describe('pctDate.timezoneSelector.directive module', function() {
         $rootScope.model = { tz: 'America/Los_Angeles' };
 
         element = $compile(
-            '<pct-timezone-selector ng-model="model.tz"  class="c1 c2"></pct-timezone-selector>'
+            '<pct-timezone-selector ng-model="model.tz"  class="c1 c2" autodetecttz="true">' +
+            '</pct-timezone-selector>'
             )($rootScope);
 
         $rootScope.$digest();
@@ -72,6 +73,21 @@ describe('pctDate.timezoneSelector.directive module', function() {
         isolateScope = element.isolateScope();
     });
 
+    it('should accept enabling/disabling Auto Detect Tz functionality', function() {
+        $rootScope.model = { tz: '' };
+
+        var element = $compile(
+            '<pct-timezone-selector ng-model="model.tz" autodetecttz="false">' +
+            '</pct-timezone-selector>'
+            )($rootScope);
+
+        $rootScope.$digest();
+
+        isolateScope = element.isolateScope();
+
+
+        expect($rootScope.model.tz).toBe('');
+    });
 
     describe('Region selector --> SubRegion selector (main select) sync', function() {
         it('should update the SubRegion list when another region is selected', function() {

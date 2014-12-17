@@ -24,7 +24,16 @@
      * - class: The directive is smart enough to apply the same classes applied to the
      *      custom element to the inner select elements. Feel free to use any bootstrap
      *      or any other framework or custom css classes.
+     * - autodetecttz {Boolean}: Instruct the directive if you want to attempt
+     *      to auto guess the user's timezone or not. Useful for editing modes.
+     *      The default is false.
      *
+     *
+     * Example
+     * ```html
+     * <pct-timezone-selector ng-model="model.tz" autodetecttz="true" class="c1 c2">
+     * </pct-timezone-selector>
+     * ```
      *
      *
      */
@@ -34,6 +43,8 @@
             //TODO: change filterTz... name
             var filterTzByRegion = filterTzByRegionFactory(getTzList().tzList);
 
+            // autodetecttz attribute logic
+            var autodetectTzFlag =  attrs.autodetecttz === 'true' ? true : false;
 
             //Initialize where filtered Timezone list will be stored
             scope.tzList;
@@ -54,7 +65,7 @@
              * of this directive (by the main select element).
              *
              * **Note1: **
-             * We need to use a $watch over an ng-change directive 
+             * We need to use a $watch over an ng-change directive
              * because the latter only responds to user input and we also
              * need to respond to changes by other components.
              *
@@ -102,11 +113,13 @@
                 scope.selectedRegion = parseTzId(tzId).region;
             }
 
-            //Use js timezone detect javascript library to auto detect the current
-            //user's timezone.
-            //Use that auto detected Time Zone as the default
-            //(already selected) option in the time zone selection directive
-            scope.ngModel = parseTzId(jstz.determine().name()).id;
+            if (autodetectTzFlag) {
+                //Use js timezone detect javascript library to auto detect the current
+                //user's timezone.
+                //Use that auto detected Time Zone as the default
+                //(already selected) option in the time zone selection directive
+                scope.ngModel = parseTzId(jstz.determine().name()).id;
+            }
         }
 
         return {

@@ -95,15 +95,7 @@ It uses [jsTz](https://bitbucket.org/pellepim/jstimezonedetect) lib to
 attempt to auto detect user's timezone.
 
 
-```html
-<pct-timezone-selector ngModel="myModel" class="c1 c2 c3 ..."></pct-timezone-selector>
-```
-
-
-Apply any Css Classes to the `class` attribute of the directive and it will add those classes
-to the inner `<select>` elements.
-This is useful for setting styles and framework classes, checkout [example.html](example.html)
-to see how we use the `class` attribute to use Bootstrap css framework.
+Check out the [inline docs](src/timezoneSelector/timezoneSelector.directive.js) (it's easier to keep up to date this way)
 
 See it running in [example.html](example.html)
 
