@@ -1,55 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="pctDate">
+<html ng-app="Example">
 <head>
 
     <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css">
-
-</head>
-
-<body>
-
-</body ng-init="test=''">
-
-    <h1>pcDate playground</h1>
-
-
-
-    <p>
-        Select your timezone! 
-        We will attemp to guess the right one for you!
-    </p>  
-
-    <form class="form-horizontal">
-        <div class="control-group">
-            <label class="control-label">Selected Time Zone Id</label>
-            <div class="controls">
-
-                <input type=text ng-model="test" style="width: 300px;">
-
-            </div>
-        </div>
-
-
-
-        <div class="control-group">
-            <label class="control-label">Time Zone</label>
-            <div class="controls">
-
-
-                <!-- main directive interface -->
-                <pct-timezone-selector ng-model="test" class="input-xlarge"></pct-timezone-selector>
-
-
-
-            </div>
-        </div>
-    </form>
-
-
-
-    <footer>This example uses bootstrap 2.3.2</footer>
-
-    <style>
+     <style>
         
         h1 {
             margin-bottom: 40px;
@@ -67,11 +21,84 @@
              position: absolute;
          }
     
-    </style>
+    </style>       
+</head>
+
+<body ng-controller="MainCtrl">
+
+
+    <h1>pcDate playground</h1>
+
+ 
+
+    <p>
+        Select your timezone! 
+        We will attemp to guess the right one for you!
+    </p>  
+
+    <form class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label">Selected Time Zone Id</label>
+            <div class="controls">
+
+                <input type=text ng-model="model.tz" style="width: 300px;">
+
+            </div>
+        </div>
+
+
+
+        <div class="control-group">
+            <label class="control-label">Time Zone</label>
+            <div class="controls">
+
+
+                <!-- main directive interface -->
+                <pct-timezone-selector ng-model="model.tz" autodetecttz="true" class="input-xlarge">
+                </pct-timezone-selector>
+
+
+
+            </div>
+        </div>
+    </form>
+  
+    <button type="button" ng-click="setTz1()">Set Tz= America/Los_Angeles </button>
+    <button type="button" ng-click="setTz2()">Set Tz= Europe/Rome </button>
+
+    <footer>This example uses bootstrap 2.3.2</footer>
+
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/moment/min/moment.min.js"></script>
     <script src="bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.min.js"></script>
     <script src="bower_components/pct-moment/dist/pctMoment.js"></script>
     <script src="dist/pctDate.js"></script>
+
+
+    <script>
+
+
+        angular.module('Example', ['pctDate'])
+            .controller('MainCtrl', function MainCtrl($scope) {
+                console.log('hi');
+
+                $scope.model = {
+                    tz: ''
+                }
+
+                $scope.setTz1 = function () {
+                    $scope.model.tz = 'America/Los_Angeles';
+                    console.log($scope.model);
+                }
+                
+                $scope.setTz2 = function () {
+                    $scope.model.tz= 'Europe/Rome';
+                }                                          
+            
+            });
+
+    </script>
+     
+</body>
 </html>
