@@ -2,12 +2,17 @@
     ng-model="selectedRegion" 
     ng-options="region for region in tzRegionList" 
     ng-change="filterTzList(selectedRegion)"
-    class="{{clazz}}">
+    class="{{clazz}}"
+>
 </select>
 
 
 <select 
     ng-model="ngModel" 
     ng-options="tz.id as tz.subregion for tz in tzList" 
-    class="{{clazz}}">
+    class="{{clazz}}"
+    ng-required="{{ngRequired}}"
+    name={{name}}
+>
+    <option></option>
 </select>
