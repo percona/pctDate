@@ -91,12 +91,13 @@ function controller(toUnixTs) {
 
 
 Reusable component to select timezones.
+Check out the [inline docs](src/timezoneSelector/timezoneSelector.directive.js) (it's easier to keep up to date this way)
+
 
 It uses [jsTz](https://bitbucket.org/pellepim/jstimezonedetect) lib to 
 attempt to auto detect user's timezone.
 
 
-Check out the [inline docs](src/timezoneSelector/timezoneSelector.directive.js) (it's easier to keep up to date this way)
 
 See it running in [example.html](example.html)
 
