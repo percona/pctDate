@@ -41,7 +41,9 @@ describe('pctDate.timezoneSelector.directive module', function() {
         $rootScope.model = { tz: 'America/Los_Angeles' };
 
         element = $compile(
-            '<pct-timezone-selector ng-model="model.tz"  class="c1 c2" autodetecttz="true">' +
+            '<pct-timezone-selector ' +
+                'ng-model="model.tz"  class="c1 c2" ' +
+                'autodetecttz="true" name="name" ng-required="true">' +
             '</pct-timezone-selector>'
             )($rootScope);
 
@@ -56,6 +58,14 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
     it('should interpolate the css classes to the select elements', function() {
         expect(element.find('.c1.c2').length).toBe(2);
+    });
+
+    it('should add the name attr and its value to the Subregion, Main, select', function() {
+        expect(element.find('[name=name]').length).toBe(1);
+    });
+
+    it('should use the ng-required attr and add it to the SubRegion, Main, select', function() {
+        expect(element.find('[ng-required=true]').length).toBe(1);
     });
 
     it('should handle empty models gracefully', function() {
