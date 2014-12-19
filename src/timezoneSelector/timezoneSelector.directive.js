@@ -14,24 +14,31 @@
     /**
      * @ngdoc directive
      * @name pctTimezoneSelector
+     * @restrict E
      * @description
      * Reusable component-like directive to select Time Zones.
      * It is well suited for angular forms.
+     * It is integrated with Time Zone auto detection.
      *
-     * Attribute / parameters
-     * - ng-model {String Time Zone Id}: the angular model to use. It will be two way data bind.
-     *      you can use it as and output as an input, just like a regular angular input element
-     * - class: The directive is smart enough to apply the same classes applied to the
+     * ## Arguments
+     * @param {String Time Zone Id} ng-model:
+     *      Assign the angular model to use. It will be two way data bound.
+     *      You can use it as and output as an input, just like a regular angular input element
+     * @param {String} class:
+     *      The directive is smart enough to apply the same classes applied to the
      *      custom element to the inner select elements. Feel free to use any bootstrap
      *      or any other framework or custom css classes.
-     * - autodetecttz {Boolean}: Instruct the directive if you want to attempt
+     * @param {Bool} autodetecttz:
+     *      Instruct the directive if you want to attempt
      *      to auto guess the user's timezone or not. Useful for editing modes.
      *      The default is false.
-     * - ng-required {Boolean}: mark if the time zone selector is a required field or not.
-     * - name {String}: Select input name
+     * @param {Bool} ng-required:
+     *      mark if the time zone selector is a required field or not.
+     * @param {String} name:
+     *      Select input name
      *
      *
-     * Example
+     * ## Example
      * ```html
      * <pct-timezone-selector
      *      ng-model="model.tz"

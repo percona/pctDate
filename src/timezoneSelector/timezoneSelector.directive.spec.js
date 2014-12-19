@@ -9,20 +9,12 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
         //Mock the list of Time Zones provided to the directive
         var getTzListMock = function() {
-            var regionList = ['America', 'Europe'];
-            var tzList = [{
-                id: 'Europe/Rome',
-                region: 'Europe',
-                subregion: 'Rome'
-            }, {
-                id: 'America/Los_Angeles',
-                region: 'America',
-                subregion: 'Los Angeles'
-            }];
-
             return {
-                regionList: regionList,
-                tzList: tzList
+                regionList: ['America', 'Europe'],
+                tzList: [
+                    {id: 'Europe/Rome', region: 'Europe', subregion: 'Rome'},
+                    {id: 'America/Los_Angeles', region: 'America', subregion: 'Los Angeles'}
+                ]
             };
         }
 
@@ -73,13 +65,11 @@ describe('pctDate.timezoneSelector.directive module', function() {
         // then it is all fine!
         $rootScope.model = { tz: '' };
 
-
         element = $compile(
             '<pct-timezone-selector ng-model="model.tz"  class="c1 c2"></pct-timezone-selector>'
             )($rootScope);
 
         $rootScope.$digest();
-
         isolateScope = element.isolateScope();
     });
 
@@ -92,10 +82,7 @@ describe('pctDate.timezoneSelector.directive module', function() {
             )($rootScope);
 
         $rootScope.$digest();
-
         isolateScope = element.isolateScope();
-
-
         expect($rootScope.model.tz).toBe('');
     });
 
@@ -104,22 +91,15 @@ describe('pctDate.timezoneSelector.directive module', function() {
             //Simulate a user Region selection
             isolateScope.filterTzList('Europe');
             $rootScope.$digest();
-            expect(isolateScope.tzList).toEqual([{
-                id: 'Europe/Rome',
-                region: 'Europe',
-                subregion: 'Rome'
-            }]);
+            expect(isolateScope.tzList)
+            .toEqual([{id: 'Europe/Rome', region: 'Europe', subregion: 'Rome'}]);
 
 
             //Simulate a user Region selection
             isolateScope.filterTzList('America');
             $rootScope.$digest();
-            expect(isolateScope.tzList).toEqual([{
-                id: 'America/Los_Angeles',
-                region: 'America',
-                subregion: 'Los Angeles'
-            }]);
-
+            expect(isolateScope.tzList)
+            .toEqual([{id: 'America/Los_Angeles', region: 'America', subregion: 'Los Angeles'}]);
         });
     });
 
@@ -128,17 +108,13 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
             //Simulate Time Zone selection
             isolateScope.ngModel = 'America/Los_Angeles';
-
             $rootScope.$digest();
-
             expect($rootScope.model.tz).toBe('America/Los_Angeles');
 
 
             //Simulate Time Zone selection
             isolateScope.ngModel  = 'Europe/Rome';
-
             $rootScope.$digest();
-
             expect($rootScope.model.tz).toBe('Europe/Rome');
         });
     });
@@ -148,7 +124,6 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
             //Initialize to a known state
             $rootScope.model.tz = 'America/Los_Angeles';
-
             $rootScope.$digest();
 
             expect(isolateScope.ngModel).toBe('America/Los_Angeles');
