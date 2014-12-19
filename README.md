@@ -2,9 +2,10 @@ pctDate
 =========
 
 [![Build Status](https://travis-ci.org/percona/pctDate.svg?branch=master)](https://travis-ci.org/percona/pctDate)
-[![Bower version](https://badge.fury.io/bo/pct-date.svg)](http://badge.fury.io/bo/pct-date)
 [![Coverage Status](https://img.shields.io/coveralls/percona/pctDate.svg)](https://coveralls.io/r/percona/pctDate)
 
+
+[![Bower Version](https://img.shields.io/bower/v/pct-date.svg)](http://shields.io/)
 
 Date utilities Angular.js Module for PCT!
 
