@@ -36,7 +36,7 @@
         We will attemp to guess the right one for you!
     </p>  
 
-    <form class="form-horizontal">
+    <form class="form-horizontal" ng-submit="submit()">
         <div class="control-group">
             <label class="control-label">Selected Time Zone Id</label>
             <div class="controls">
@@ -54,13 +54,22 @@
 
 
                 <!-- main directive interface -->
-                <pct-timezone-selector ng-model="model.tz" autodetecttz="true" class="input-xlarge">
+                <pct-timezone-selector 
+                    ng-model="model.tz" 
+                    autodetecttz="true" 
+                    class="input-xlarge"
+                    ng-required="true"
+                    name="test"
+                >
                 </pct-timezone-selector>
 
 
 
             </div>
         </div>
+
+
+        <button >Submit</button>
     </form>
   
     <button type="button" ng-click="setTz1()">Set Tz= America/Los_Angeles </button>
@@ -95,6 +104,10 @@
                 $scope.setTz2 = function () {
                     $scope.model.tz= 'Europe/Rome';
                 }                                          
+
+                $scope.submit = function() {
+                    console.log("submitting form!");
+                }
             
             });
 
