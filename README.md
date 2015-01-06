@@ -33,7 +33,7 @@ Include it in your site
 <script src="angular.js"></script>
 <script src="moment.js"></script>
 <script src="moment-timezone.js"></script>
-
+<script src="pctMoment.js"></script>
 
 
 <!-- main include -->
