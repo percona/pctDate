@@ -2,12 +2,12 @@
   "name": "pct-moment",
   "version": "0.0.0",
   "scripts": {
-    "test": "gulp continuous && npm run e2e",
-    "pree2e": "npm run server && npm run e2e-server",
+    "test": "gulp continuous",
+    "server": "http-server &",
+    "pree2e": "npm run server",
     "e2e": "protractor protractor.conf.js",
     "pree2e-server": "webdriver-manager update",
-    "e2e-server": "webdriver-manager start &",
-    "server": "http-server &"
+    "e2e-server": "webdriver-manager start"
   },
   "license": "MIT",
   "devDependencies": {
