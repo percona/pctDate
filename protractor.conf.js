@@ -4,5 +4,8 @@ exports.config = {
     jasmineNodeOpts: {
         // Use colors in the command line report.
         showColors: true
+    },
+    capabilities: {
+        browserName: 'firefox'
     }
 }
