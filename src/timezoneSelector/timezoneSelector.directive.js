@@ -50,14 +50,12 @@
      * </pct-timezone-selector>
      * ```
      *
+     * This directive works correctly with Native HTML Form implementations.
      *
      */
     function directiveDef(getTzList, filterTzByRegionFactory, jstz, parseTzId) {
 
         function link(scope, element, attrs, ngModelController) {
-            //TODO: change filterTz... name
-            var filterTzByRegion = filterTzByRegionFactory(getTzList().tzList);
-
             // autodetecttz attribute logic
             var autodetectTzFlag =  attrs.autodetecttz === 'true' ? true : false;
 
@@ -65,57 +63,67 @@
             scope.tzList;
             //Initialize where the current selected Region will be stored
             scope.selectedRegion;
-            scope.selectedTz;
 
-            //Props
+            // Props
+            // =====
+            // Here it is stored all the data that does not change over time
+            // and it's provided at the start of the directive (the link function
+            // is executed)
             scope.props = {
                 //Initialize the List of Regions available
                 tzRegionList: getTzList().regionList,
+                //Autodetect the current user's timezone
                 autoDetectedTz: parseTzId(jstz.determine().name())
-
             }
 
 
+            // State
+            // ====
+            // All the data that changes over time, it is not derived from
+            // any other piece of data and it's not a prop.
+            //
+            // For this simple directive the only piece of data is the
+            // parsed Timezone object that represents the currently selected
+            // time zone.
             scope.state = {
                 selectedTz: {},
 
+                /**
+                 * @description
+                 * This function concentrates all the logic that should
+                 * be executed when, from whatever source, the currently
+                 * selected Time zone is changed.
+                 *
+                 * It updates the state, the selected region and region list
+                 * and updates the Directive's Model provided by the user.
+                 *
+                 * @param {Object} tz A parsed timezone object. (see parseTz.service.js)
+                 *
+                 */
                 setSelectedTz: function(tz) {
                     this.selectedTz = tz;
-                    scope.setSelectedRegion(tz);
-                    scope.updateModel(tz.id)
+                    scope.setSelectedRegion(tz.region);
+                    ngModelController.$setViewValue(tz.id, 'pctTimezoneSelector:user-select')
                 }
 
             }
 
+            //TODO: change filterTz... name
+            var filterTzByRegion = filterTzByRegionFactory(getTzList().tzList);
+
             /**
-             * @name filterTzList
-             * @param {String} Region where TimeZone Id = "Region/SubRegion"
-             *
              * @description
-             * Main handler for filtering the main select element
-             * list of options by the selected Region
+             * This deals with selectedRegion changes.
+             * It updates the scope variable and the tzList with
+             * the currently selectedRegion.
              *
+             * @param {String} region The region string, as provided by a parsed Timezone
+             *  object. (see parseTz.service.js)
              */
-            scope.filterTzList = function(region) {
+            scope.setSelectedRegion = function(region) {
+                scope.selectedRegion = region;
                 scope.tzList = filterTzByRegion(region)
             }
-
-            /**
-             * @name setSelectedRegion
-             * @param {String} tzId
-             *
-             * @description
-             * Setter for the selectedRegion.
-             * It extracts the selected Region from the TzId
-             * selected in the main select element (ngModel)
-             *
-             */
-            scope.setSelectedRegion = function(tz) {
-                scope.selectedRegion = tz.region;
-                scope.filterTzList(tz.region)
-            }
-
-
 
 
             /**
@@ -123,24 +131,23 @@
              * Implement ngModel watch.
              * This enables the directive to respond correctly to
              * the ngModel changes originated from the outside of this directive
-             * (by another controller for example) or from inside
-             * of this directive (by the main select element).
+             * (by another controller for example).
              *
              * **Note1: **
              * We need to use a $watch over an ng-change directive
              * because the latter only responds to user input and we also
              * need to respond to changes by other components.
              *
-             * **Note2: **
-             * ngModelController.$render was the first choice over the $watch
-             * but we couldn't make it work.
-             *
              */
             scope.$watch(
+                // Value to be watched
                 function() {
                     return ngModelController.$modelValue
                 },
+                // Change handler
                 function(tzId) {
+                    // If the tzId is null then don't do anything
+                    // Useful for the first time this function runs
                     if (!tzId) {
                         return;
                     }
@@ -148,11 +155,6 @@
                     scope.state.setSelectedTz(parseTzId(tzId))
                 }
             );
-
-            scope.updateModel = function(tzId) {
-                debugger;
-                ngModelController.$setViewValue(tzId, 'pctTimezoneSelector:user-select')
-            }
 
 
             if (autodetectTzFlag) {

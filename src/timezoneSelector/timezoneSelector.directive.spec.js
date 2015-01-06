@@ -89,14 +89,14 @@ describe('pctDate.timezoneSelector.directive module', function() {
     describe('Region selector --> SubRegion selector (main select) sync', function() {
         it('should update the SubRegion list when another region is selected', function() {
             //Simulate a user Region selection
-            isolateScope.filterTzList('Europe');
+            isolateScope.setSelectedRegion('Europe');
             $rootScope.$digest();
             expect(isolateScope.tzList)
             .toEqual([{id: 'Europe/Rome', region: 'Europe', subregion: 'Rome'}]);
 
 
             //Simulate a user Region selection
-            isolateScope.filterTzList('America');
+            isolateScope.setSelectedRegion('America');
             $rootScope.$digest();
             expect(isolateScope.tzList)
             .toEqual([{id: 'America/Los_Angeles', region: 'America', subregion: 'Los Angeles'}]);
@@ -105,6 +105,7 @@ describe('pctDate.timezoneSelector.directive module', function() {
 
     describe('Directive --> Model sync', function() {
         it('should set the model with the selected Time Zone id', function() {
+            //This is rather a trivial test to do.
 
             //Simulate Time Zone selection
             isolateScope.ngModel = 'America/Los_Angeles';
