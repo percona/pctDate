@@ -2,7 +2,7 @@
   "name": "pct-moment",
   "version": "0.0.0",
   "scripts": {
-    "test": "gulp continuous",
+    "test": "gulp continuous && npm run e2e",
     "pree2e": "npm run server && npm run e2e-server",
     "e2e": "protractor protractor.conf.js",
     "pree2e-server": "webdriver-manager update",
