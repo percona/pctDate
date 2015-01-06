@@ -128,6 +128,19 @@ angular app.
 
 For documentation check it's inline docs.
 
+# Tests
+
+```sh
+# Run unit tests
+# This is the default travis task
+npm test
+
+# Protractor tests
+npm run e2e
+# Please note that this will spawn 2 processes
+# in the background, and for now the only way of
+# killing them is by manually sending the Kill signal
+```
 
 # Contribute
 

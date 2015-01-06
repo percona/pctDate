@@ -41,7 +41,7 @@
             <label class="control-label">Selected Time Zone Id</label>
             <div class="controls">
 
-                <input type=text ng-model="model.tz" style="width: 300px;">
+                <input type=text class="test-input" ng-model="model.tz" style="width: 300px;">
 
             </div>
         </div>
@@ -59,7 +59,7 @@
                     autodetecttz="true" 
                     class="input-xlarge"
                     ng-required="true"
-                    name="test"
+                    name="timezone"
                 >
                 </pct-timezone-selector>
 
@@ -90,7 +90,6 @@
 
         angular.module('Example', ['pctDate'])
             .controller('MainCtrl', function MainCtrl($scope) {
-                console.log('hi');
 
                 $scope.model = {
                     tz: ''
