@@ -67,6 +67,9 @@
             //Initialize where the current selected Region will be stored
             scope.selectedRegion;
 
+            //
+            scope.selectedTz;
+
             //Initialize the List of Regions available
             scope.tzRegionList = getTzList().regionList;
 
@@ -94,11 +97,16 @@
                     return ngModelController.$modelValue
                 },
                 function(tzId) {
+  //                  debugger;
                     var tzId = parseTzId(scope.ngModel);
                     scope.filterTzList(tzId.region);
                     scope.setSelectedRegion(tzId.id);
                 }
             );
+
+            scope.updateModel = function(tzId) {
+                ngModelController.$setViewValue(tzId, 'pctTimezoneSelector:user-select')
+            }
 
 
             /**

@@ -8,11 +8,13 @@
 
 
 <select 
-    ng-model="ngModel" 
-    ng-options="tz.id as tz.subregion for tz in tzList" 
+    ng-model="selectedTz" 
+    ng-options="tz.subregion for tz in tzList track by tz.id" 
     class="{{clazz}}"
     ng-required="{{ngRequired}}"
-    name={{name}}
+    name="{{name}}"
+    ng-change="updateModel(selectedTz.id)"
+
 >
     <option></option>
 </select>
