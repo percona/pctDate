@@ -1,6 +1,6 @@
 <select 
     ng-model="selectedRegion" 
-    ng-options="region for region in tzRegionList" 
+    ng-options="region for region in props.tzRegionList" 
     ng-change="filterTzList(selectedRegion)"
     class="{{clazz}}"
 >
@@ -8,12 +8,12 @@
 
 
 <select 
-    ng-model="selectedTz" 
+    ng-model="state.selectedTz" 
     ng-options="tz.subregion for tz in tzList track by tz.id" 
     class="{{clazz}}"
     ng-required="{{ngRequired}}"
     name="{{name}}"
-    ng-change="updateModel(selectedTz.id)"
+    ng-change="updateModel(state.selectedTz.id)"
 
 >
     <option></option>

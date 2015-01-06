@@ -63,15 +63,59 @@
 
             //Initialize where filtered Timezone list will be stored
             scope.tzList;
-
             //Initialize where the current selected Region will be stored
             scope.selectedRegion;
-
-            //
             scope.selectedTz;
 
-            //Initialize the List of Regions available
-            scope.tzRegionList = getTzList().regionList;
+            //Props
+            scope.props = {
+                //Initialize the List of Regions available
+                tzRegionList: getTzList().regionList,
+                autoDetectedTz: parseTzId(jstz.determine().name())
+
+            }
+
+
+            scope.state = {
+                selectedTz: {},
+
+                setSelectedTz: function(tz) {
+                    this.selectedTz = tz;
+                    scope.setSelectedRegion(tz);
+                    scope.updateModel(tz.id)
+                }
+
+            }
+
+            /**
+             * @name filterTzList
+             * @param {String} Region where TimeZone Id = "Region/SubRegion"
+             *
+             * @description
+             * Main handler for filtering the main select element
+             * list of options by the selected Region
+             *
+             */
+            scope.filterTzList = function(region) {
+                scope.tzList = filterTzByRegion(region)
+            }
+
+            /**
+             * @name setSelectedRegion
+             * @param {String} tzId
+             *
+             * @description
+             * Setter for the selectedRegion.
+             * It extracts the selected Region from the TzId
+             * selected in the main select element (ngModel)
+             *
+             */
+            scope.setSelectedRegion = function(tz) {
+                scope.selectedRegion = tz.region;
+                scope.filterTzList(tz.region)
+            }
+
+
 
 
             /**
@@ -97,52 +141,29 @@
                     return ngModelController.$modelValue
                 },
                 function(tzId) {
-  //                  debugger;
-                    var tzId = parseTzId(scope.ngModel);
-                    scope.filterTzList(tzId.region);
-                    scope.setSelectedRegion(tzId.id);
+                    if (!tzId) {
+                        return;
+                    }
+
+                    scope.state.setSelectedTz(parseTzId(tzId))
                 }
             );
 
             scope.updateModel = function(tzId) {
+                debugger;
                 ngModelController.$setViewValue(tzId, 'pctTimezoneSelector:user-select')
             }
 
-
-            /**
-             * @name filterTzList
-             * @param {String} Region where TimeZone Id = "Region/SubRegion"
-             *
-             * @description
-             * Main handler for filtering the main select element
-             * list of options by the selected Region
-             *
-             */
-            scope.filterTzList = function(region) {
-                scope.tzList = filterTzByRegion(region)
-            }
-
-            /**
-             * @name setSelectedRegion
-             * @param {String} tzId
-             *
-             * @description
-             * Setter for the selectedRegion.
-             * It extracts the selected Region from the TzId
-             * selected in the main select element (ngModel)
-             *
-             */
-            scope.setSelectedRegion = function(tzId) {
-                scope.selectedRegion = parseTzId(tzId).region;
-            }
 
             if (autodetectTzFlag) {
                 //Use js timezone detect javascript library to auto detect the current
                 //user's timezone.
                 //Use that auto detected Time Zone as the default
                 //(already selected) option in the time zone selection directive
-                scope.ngModel = parseTzId(jstz.determine().name()).id;
+                scope.state.setSelectedTz(scope.props.autoDetectedTz);
             }
+
+
         }
 
         return {
