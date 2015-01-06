@@ -20,7 +20,7 @@
     "!dist/pctDate.min.js"
   ],
   "dependencies": {
-    "angular": "~1.2",
+    "angular": "~1.2.26",
     "pct-moment": "0.0.3"
   },
   "devDependencies": {
