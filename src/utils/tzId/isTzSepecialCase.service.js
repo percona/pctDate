@@ -26,6 +26,8 @@
      * - 'Brazil/Subregion'
      * - 'Chile/Subregion'
      * - 'Mexico/Subregion'
+     * - 'Etc/GMT*'
+     * - 'America/Buenos_Aires' (the correct one is 'America/Argentina/Buenos_Aires')
      *
      * Where Region and Subregion could be any string representing them
      * such as Brazil, Chile, Mexico, America, Africa for Region and
@@ -44,7 +46,9 @@
             return !subregion ||
                 region === 'Brazil' ||
                 region === 'Chile' ||
-                region === 'Mexico';
+                region === 'Mexico' ||
+                /^Buenos Aires/.test(subregion) ||
+                /^GMT/.test(subregion);
         }
     }
 
