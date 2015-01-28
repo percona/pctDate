@@ -120,6 +120,10 @@ function controller(jsTzDetect) {
 }
 ```
 
+## [pctDateFilter](src/utils/pctDateFiler)
+
+Check the [inline docs](src/utils/pctDateFilter/pctDate.filter.js)
+
 
 ##  [Time Zone Id manipulation module](src/utils/tzId)
 
