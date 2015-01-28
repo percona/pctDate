@@ -35,7 +35,7 @@
      *       - If it is a Moment's format string then this filter will just format the date input
      *          with the correct time zone.
      *       - If the parameter is a Date Object then this filter will switch it's functionality
-     *          to the Moment's `from()` API URL
+     *          to the Moment's `from()` API http://momentjs.com/docs/#/displaying/from/
      *          Use a `new Date()` object to achieve the same as Moment's  `fromNow()` API
      *
      * @returns {string} A formatted String that displays a date
