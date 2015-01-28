@@ -20,7 +20,8 @@
         'pctDate.toUnixTs',
         'pctDate.isDate',
         'pctDate.timezoneSelector',
-        'pctDate.utils.jsTzDetect'
+        'pctDate.utils.jsTzDetect',
+        'pctDate.utils.pctDateFilter'
     ]);
 
 }) ();
