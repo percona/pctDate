@@ -27,7 +27,6 @@
      *
      */
     function factory() {
-        //TODO: Check that tzId is a valid timezone Id
         var aux, subregion;
 
         return function(tzId) {
