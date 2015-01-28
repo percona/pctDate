@@ -101,6 +101,11 @@
                  *
                  */
                 setSelectedTz: function(tz) {
+                    // This prevents the directive from generating an error
+                    // when the user clicks on the default option inside the select
+                    if (!tz) {
+                        return;
+                    }
                     this.selectedTz = tz;
                     scope.setSelectedRegion(tz.region);
                     ngModelController.$setViewValue(tz.id, 'pctTimezoneSelector:user-select')
