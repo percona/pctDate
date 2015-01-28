@@ -22,14 +22,14 @@
      * {{ aDate | pctDate:format:timeZone}}
      *
      * @param {Date} date - Javascript Native Date Object, the date to be converted
-     * @param {string} format - A valid moment.js format string http://momentjs.com/docs/#/displaying/format
      * @param {string} timeZone - A valid IANA Time Zone Id, for example "Europe/Rome"
+     * @param {string} format - A valid moment.js format string http://momentjs.com/docs/#/displaying/format
      *
      * @returns {string} A formatted String that displays a date
      *
      */
     function pctDateFilterDef(moment) {
-        return function pctDateFilter(date, format, timeZone) {
+        return function pctDateFilter(date, timeZone, format) {
             if (!timeZone) {
                 throw TypeError('pctDateFilter: timeZone parameter is required');
             }

@@ -18,17 +18,17 @@
 
 
     it('should return a valid date formatted string', function() {
-        expect(pctDate(d, format1, timeZone1)).toBe(moment.tz(timeZone1).format(format1));
-        expect(pctDate(d, format1, timeZone2)).toBe(moment.tz(timeZone2).format(format1));
+        expect(pctDate(d, timeZone1, format1)).toBe(moment.tz(timeZone1).format(format1));
+        expect(pctDate(d, timeZone2, format1)).toBe(moment.tz(timeZone2).format(format1));
     });
 
     it('should return a valid date formatted string when the format is empty', function() {
-        expect(pctDate(d, format2, timeZone1)).toBe(moment.tz(timeZone1).format(format2));
+        expect(pctDate(d, timeZone1, format2)).toBe(moment.tz(timeZone1).format(format2));
     });
 
     describe('invalid parameteres', function() {
         it('should throw an error when "timeZone" is not specified', function() {
-            expect(function() { pctDate(d, format1) }).toThrow();
+            expect(function() { pctDate(d) }).toThrow();
         });
 
     });
