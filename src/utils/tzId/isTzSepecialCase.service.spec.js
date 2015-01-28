@@ -49,4 +49,31 @@ describe('pctDate.utils.tzId.isTzSpecialCase module', function() {
 
         expect(result).toBe(true);
     });
+
+
+    it('should return true for all Etc/GMT* TimeZone Ids', function() {
+        var result = isTzSpecialCase({
+            region: 'Etc',
+            subregion: 'GMT'
+        });
+        expect(result).toBe(true);
+
+        var result = isTzSpecialCase({
+            region: 'Etc',
+            subregion: 'GMT-14'
+        });
+        expect(result).toBe(true);
+    });
+
+
+    // The correct one here is America/Argentina/Buenos_Aires that is why we dont
+    // want to cover America/Buenos_Aires
+    it('should return true for America/Buenos_Aires TimeZone Ids', function() {
+        var result = isTzSpecialCase({
+            region: 'America',
+            subregion: 'Buenos Aires'
+        });
+
+        expect(result).toBe(true);
+    });
 });
