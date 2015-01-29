@@ -52,7 +52,8 @@
         'pctDate.toUnixTs',
         'pctDate.isDate',
         'pctDate.timezoneSelector',
-        'pctDate.utils.jsTzDetect'
+        'pctDate.utils.jsTzDetect',
+        'pctDate.utils.pctDateFilter'
     ]);
 
 }) ();
@@ -211,6 +212,11 @@
                  *
                  */
                 setSelectedTz: function(tz) {
+                    // This prevents the directive from generating an error
+                    // when the user clicks on the default option inside the select
+                    if (!tz) {
+                        return;
+                    }
                     this.selectedTz = tz;
                     scope.setSelectedRegion(tz.region);
                     ngModelController.$setViewValue(tz.id, 'pctTimezoneSelector:user-select')
@@ -344,6 +350,70 @@
         //Since jstz will be concatenated with pctDate we dont need to check
         //if it has been loaded correctly
         return $window.jstz;
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('pctDate.utils.pctDateFilter', [
+        'pctMoment'
+    ])
+        .filter('pctDate', pctDateFilterDef);
+
+    pctDateFilterDef.$inject = ['moment'];
+
+    /**
+     * @name pctDate
+     * @description
+     * Useful filter to render dates with a determined format and time zone.
+     * If the format parameter is a Date then it will return a "From" string,
+     * i.e "A few seconds ago"
+     *
+     * Time Zone parameter should be always present.
+     * The reasons behind the Time Zone being a parameter and not
+     * a state of the filter are the following:
+     * - Making this filter stateless will provide performance
+     *      improvements when using Angular 1.3+
+     * - Time Zone can change dynamically so this filter abstracts
+     *      from that and provides maximum flexibility
+     *
+     * @example
+     * {{ date | pctDate:timeZone:format }} //=> A formated Date String
+     * {{ date | pctDate:timeZone:fromNow }} //=> Something like "A year ago"
+     *
+     *
+     * @param {Date} date - Javascript Native Date Object, the input date.
+     * @param {string} timeZone - A valid IANA Time Zone Id, for example "Europe/Rome"
+     * @param {string|Date} format - A valid moment.js format string
+     *      http://momentjs.com/docs/#/displaying/format or a Javascript Native Date Object.
+     *       - If it is a Moment's format string then this filter will just format the date input
+     *          with the correct time zone.
+     *       - If the parameter is a Date Object then this filter will switch it's functionality
+     *          to the Moment's `from()` API http://momentjs.com/docs/#/displaying/from/
+     *          Use a `new Date()` object to achieve the same as Moment's  `fromNow()` API
+     *
+     * @returns {string} A formatted String that displays a date
+     *
+     */
+    function pctDateFilterDef(moment) {
+        return function pctDateFilter(date, timeZone, format) {
+            var fromDate;
+
+            if (!timeZone) {
+                throw TypeError('pctDateFilter: timeZone parameter is required');
+            }
+
+            // if format is date then this filter is being used
+            // to express a moment's "from" String
+            // i.e: "a year ago"
+            if (toString.call(format) === '[object Date]') {
+                fromDate = format;
+                return moment(date).tz(timeZone).from(fromDate);
+            }
+
+            return moment(date).tz(timeZone).format(format);
+        }
     }
 })();
 
@@ -507,6 +577,8 @@
      * - 'Brazil/Subregion'
      * - 'Chile/Subregion'
      * - 'Mexico/Subregion'
+     * - 'Etc/GMT*'
+     * - 'America/Buenos_Aires' (the correct one is 'America/Argentina/Buenos_Aires')
      *
      * Where Region and Subregion could be any string representing them
      * such as Brazil, Chile, Mexico, America, Africa for Region and
@@ -525,7 +597,9 @@
             return !subregion ||
                 region === 'Brazil' ||
                 region === 'Chile' ||
-                region === 'Mexico';
+                region === 'Mexico' ||
+                /^Buenos Aires/.test(subregion) ||
+                /^GMT/.test(subregion);
         }
     }
 
@@ -560,7 +634,6 @@
      *
      */
     function factory() {
-        //TODO: Check that tzId is a valid timezone Id
         var aux, subregion;
 
         return function(tzId) {
