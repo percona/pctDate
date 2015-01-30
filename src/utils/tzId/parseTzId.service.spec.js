@@ -40,4 +40,15 @@ describe('pctDate.utils.tzId.parseTzId module', function() {
         expect(result.region).toBe('Kongo'),
         expect(result.subregion).toBeFalsy();
     });
+
+    it('should handle php & mysql default tz value and normalize it', function() {
+        var id = '+00:00';
+        var result = parseTzId(id);
+
+        var expected = parseTzId('Etc/UTC');
+
+        expect(result.id).toBe(expected.id);
+        expect(result.region).toBe(expected.region),
+        expect(result.subregion).toBe(expected.subregion);
+    })
 });

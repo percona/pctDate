@@ -30,6 +30,10 @@
         var aux, subregion;
 
         return function(tzId) {
+
+            // Cover the default mysql & php time zone value
+            tzId = tzId === '+00:00' ? 'Etc/UTC' : tzId;
+
             aux = tzId.match(/(^[^\/]*)\/?(.*)/);
 
 
