@@ -6,18 +6,6 @@ describe('pctDate.config.pctDateConfig module', function() {
     // Include the main module
     beforeEach(module('pctDate.config'));
 
-    //Mock dependencies
-    /*
-    beforeEach(module(function($provide) {
-
-        var serviceMock = jasmine.createSpy('serviceMock')
-                            .and.returnValue();
-
-        $provide.value('service', serviceMock);
-
-    }));
-    */
-
     // Get a reference of the service to test
     beforeEach(inject(function($injector) {
         config = $injector.get('pctDateConfig');

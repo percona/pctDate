@@ -12,23 +12,17 @@
     /**
      * @name pctDateFrom
      * @description
-     * Useful filter to render dates with a determined format and time zone.
-     * If the format parameter is a Date then it will return a "From" string,
-     * i.e "A few seconds ago"
+     * Useful filter to render From strings using `from` Moment method.
+     * If the fromDate parameter is null then this filter will render `fromNow` Moment method.
+     * This filter uses the pctDateConfig.timeZone value to properly shift formatted dates with a time zone.
      *
-     * Time Zone parameter should be always present.
-     * The reasons behind the Time Zone being a parameter and not
-     * a state of the filter are the following:
-     * - Making this filter stateless will provide performance
-     *      improvements when using Angular 1.3+
-     * - Time Zone can change dynamically so this filter abstracts
-     *      from that and provides maximum flexibility
+     * - `from` Moment API: http://momentjs.com/docs/#/displaying/from
+     * - `fromNow` Moment API: http://momentjs.com/docs/#/displaying/fromNow
      *
+     * **Note**
+     * This filter is stateful because it depends on the pctDateConfig.timeZone value
+     * (only applicable to Angular 1.3+), see API https://docs.angularjs.org/guide/filter
      *
-     *
-     *        - If the parameter is a Date Object then this filter will switch it's functionality
-     *          to the Moment's `from()` API http://momentjs.com/docs/#/displaying/from/
-     *          Use a `new Date()` object to achieve the same as Moment's  `fromNow()` API
      *
      * @example
      * {{ date | pctDate:fromDate }} //=> Something like "A year ago"
@@ -37,11 +31,15 @@
      * @param {Date} date - Javascript Native Date Object, the input date.
      * @param {Date|null} fromDate - A Javascript Native Date Object.
      *
-     * @returns {string} A formatted String that displays a date
+     * @returns {string} A formatted From String
      *
      */
     function pctDateFromFilterDef(moment, pctDateConfig) {
-        return function pctDateFromFilter(date, fromDate) {
+
+        //Mark this filter as stateful (only for Angular 1.3)
+        pctDateFromFilter.$stateful = true;
+
+        function pctDateFromFilter(date, fromDate) {
 
             // If fromDate is not null and it is not a Date object then throw!
             if (fromDate &&  toString.call(fromDate) !== '[object Date]') {
@@ -55,5 +53,7 @@
 
             return moment(date).tz(pctDateConfig.timeZone).from(fromDate);
         }
+
+        return pctDateFromFilter;
     }
 })();
