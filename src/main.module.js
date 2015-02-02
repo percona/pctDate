@@ -17,11 +17,13 @@
      *
      */
     angular.module('pctDate', [
+        'pctDate.config',
         'pctDate.toUnixTs',
         'pctDate.isDate',
         'pctDate.timezoneSelector',
         'pctDate.utils.jsTzDetect',
-        'pctDate.utils.pctDateFilter'
+        'pctDate.utils.pctDateFilter',
+        'pctDate.utils.pctDateFromFilter'
     ]);
 
 }) ();

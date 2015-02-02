@@ -4,11 +4,9 @@
 
     <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css">
      <style>
-        
         h1 {
             margin-bottom: 40px;
         }
-        
         body  {
             margin-top: 30px;
             width: 900px;
@@ -20,21 +18,15 @@
              bottom: 0;
              position: absolute;
          }
-    
-    </style>       
+    </style>
 </head>
 
 <body ng-controller="MainCtrl">
-
-
     <h1>pcDate playground</h1>
-
- 
-
     <p>
         Select your timezone! 
         We will attemp to guess the right one for you!
-    </p>  
+    </p>
 
     <form class="form-horizontal" action="/test">
         <div class="control-group">
@@ -45,9 +37,6 @@
 
             </div>
         </div>
-
-
-
         <div class="control-group">
             <label class="control-label">Time Zone</label>
             <div class="controls">
@@ -67,13 +56,23 @@
 
             </div>
         </div>
-
-
         <button>Submit</button>
     </form>
-  
-    <button type="button" ng-click="setTz1()">Set Tz= America/Los_Angeles </button>
-    <button type="button" ng-click="setTz2()">Set Tz= Europe/Rome </button>
+
+
+
+    <div>
+        <h2>Filter PlayGround</h2>
+        <p>{{date | pctDate}}</p>
+        <p>{{date | pctDateFrom}}</p>
+    </div>
+
+
+
+    <p>Set tz and pctDateConfig.timeZone to <button type="button" ng-click="setTz('America/Los_Angeles')">America/Los_Angeles </button></p>
+    <p>Set tz and pctDateConfig.timeZone to <button type="button" ng-click="setTz('Europe/Rome')">Europe/Rome </button></p>
+
+
 
     <footer>This example uses bootstrap 2.3.2</footer>
 
@@ -86,31 +85,23 @@
 
 
     <script>
-
-
         angular.module('Example', ['pctDate'])
-            .controller('MainCtrl', function MainCtrl($scope) {
+            .controller('MainCtrl', function MainCtrl($scope,pctDateConfig) {
 
                 $scope.model = {
                     tz: ''
                 }
-
-                $scope.setTz1 = function () {
-                    $scope.model.tz = 'America/Los_Angeles';
-                    console.log($scope.model);
+                $scope.setTz = function (tz) {
+                    $scope.model.tz = tz;
+                    pctDateConfig.timeZone = tz;
                 }
-                
-                $scope.setTz2 = function () {
-                    $scope.model.tz= 'Europe/Rome';
-                }                                          
 
                 $scope.submit = function() {
                     console.log("submitting form!");
                 }
-            
-            });
 
+                $scope.date = new Date();
+            });
     </script>
-     
 </body>
 </html>
