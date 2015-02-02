@@ -17,6 +17,7 @@
      *
      */
     angular.module('pctDate', [
+        'pctDate.config',
         'pctDate.toUnixTs',
         'pctDate.isDate',
         'pctDate.timezoneSelector',

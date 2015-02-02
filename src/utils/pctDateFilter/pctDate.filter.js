@@ -2,11 +2,12 @@
     'use strict';
 
     angular.module('pctDate.utils.pctDateFilter', [
+        'pctDate.config',
         'pctMoment'
     ])
         .filter('pctDate', pctDateFilterDef);
 
-    pctDateFilterDef.$inject = ['moment'];
+    pctDateFilterDef.$inject = ['moment', 'pctDateConfig'];
 
     /**
      * @name pctDate
@@ -25,7 +26,6 @@
      *
      * @example
      * {{ date | pctDate:timeZone:format }} //=> A formated Date String
-     * {{ date | pctDate:timeZone:fromNow }} //=> Something like "A year ago"
      *
      *
      * @param {Date} date - Javascript Native Date Object, the input date.
@@ -41,23 +41,11 @@
      * @returns {string} A formatted String that displays a date
      *
      */
-    function pctDateFilterDef(moment) {
-        return function pctDateFilter(date, timeZone, format) {
+    function pctDateFilterDef(moment, pctDateConfig) {
+        return function pctDateFilter(date, format) {
             var fromDate;
 
-            if (!timeZone) {
-                throw TypeError('pctDateFilter: timeZone parameter is required');
-            }
-
-            // if format is date then this filter is being used
-            // to express a moment's "from" String
-            // i.e: "a year ago"
-            if (toString.call(format) === '[object Date]') {
-                fromDate = format;
-                return moment(date).tz(timeZone).from(fromDate);
-            }
-
-            return moment(date).tz(timeZone).format(format);
+            return moment(date).tz(pctDateConfig.timeZone).format(format);
         }
     }
 })();
