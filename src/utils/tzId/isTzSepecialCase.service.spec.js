@@ -76,4 +76,35 @@ describe('pctDate.utils.tzId.isTzSpecialCase module', function() {
 
         expect(result).toBe(true);
     });
+
+
+    it('should return true for all US/* TimeZone Ids', function() {
+        var result = isTzSpecialCase({
+            region: 'US',
+            subregion: 'Pacific'
+        });
+        expect(result).toBe(true);
+
+        var result = isTzSpecialCase({
+            region: 'US',
+            subregion: 'Samoa'
+        });
+        expect(result).toBe(true);
+    });
+
+    it('should return true for all Canada/* TimeZone Ids', function() {
+        var result = isTzSpecialCase({
+            region: 'Canada',
+            subregion: 'Central'
+        });
+        expect(result).toBe(true);
+
+        var result = isTzSpecialCase({
+            region: 'Canada',
+            subregion: 'Yukon'
+        });
+        expect(result).toBe(true);
+    });
+
+
 });

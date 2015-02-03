@@ -678,6 +678,8 @@
      * - 'Mexico/Subregion'
      * - 'Etc/GMT*'
      * - 'America/Buenos_Aires' (the correct one is 'America/Argentina/Buenos_Aires')
+     * - US/*
+     * - Canada/*
      *
      * Where Region and Subregion could be any string representing them
      * such as Brazil, Chile, Mexico, America, Africa for Region and
@@ -697,6 +699,8 @@
                 region === 'Brazil' ||
                 region === 'Chile' ||
                 region === 'Mexico' ||
+                region === 'US' ||
+                region === 'Canada' ||
                 /^Buenos Aires/.test(subregion) ||
                 /^GMT/.test(subregion);
         }
