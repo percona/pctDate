@@ -35,14 +35,24 @@
     function fancyDateRangeService(moment, pctDateConfig) {
         return function fancyDateRange(start, end) {
 
-            var sameYear = (start.getFullYear() === end.getFullYear());
-            var sameMonth = (start.getMonth() === end.getMonth());
-            var sameDay = (start.getDate() === end.getDate());
 
             //Moment.js wrappers for the start and end dates
             //Also make them relative to user's time zone
             var mStart = moment(start).tz(pctDateConfig.timeZone);
             var mEnd = moment(end).tz(pctDateConfig.timeZone);
+
+            // This flags needs to be calculated from the dates
+            // relative to their time zone because of edge cases
+            // where a time zone shift can actually move one of the dates
+            // into a different day, month or even year
+            //
+            // i.e:
+            // 1/11/2014 02:00 in UTC
+            // 31/10/204 23:00 in UTC -03:00 (Buenos Aires)
+            var sameYear = (mStart.year() === mEnd.year());
+            var sameMonth = (mStart.month() === mEnd.month());
+            var sameDay = (mStart.date() === mEnd.date());
+
 
             // Same year, month and day
             // ie: April 16 2014, 20:42 to 21:42
