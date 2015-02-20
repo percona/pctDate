@@ -32,7 +32,7 @@
      * @return {String}
      */
     function fancyDateRangeFilter(moment) {
-        return function (start, end) {
+        return function(start, end) {
 
             // @todo: add TZ support
 
@@ -46,14 +46,14 @@
 
             // Same year, month and day
             // ie: April 16 2014, 20:42 to 21:42
-            if ( sameYear && sameMonth && sameDay) {
+            if (sameYear && sameMonth && sameDay) {
                 return mStart.format('MMM D YYYY, HH:mm') +
                         ' to ' + mEnd.format('HH:mm');
             }
 
             // Same year and month and different day
             // ie: Oct 2014, Sat 4 16:08 - Mon 6 15:07 (PCT-981)
-            if ( sameYear && sameMonth && !sameDay) {
+            if (sameYear && sameMonth && !sameDay) {
                 return mStart.format('MMM YYYY') +
                         ', ' + mStart.format('ddd D HH:mm') +
                         ' - ' + mEnd.format('ddd D HH:mm');
