@@ -1,12 +1,13 @@
 (function() {
     'use strict';
 
-    angular.module('pctDate.utils.fancyDateRangeFilter', [
+    angular.module('pctDate.utils.fancyDateRange', [
+        'pctDate.config',
         'pctMoment'
     ])
-        .filter('fancyDateRange', fancyDateRangeFilter);
+        .factory('fancyDateRange', fancyDateRangeService);
 
-    fancyDateRangeFilter.$inject = ['moment'];
+    fancyDateRangeService.$inject = ['moment', 'pctDateConfig'];
 
     /**
      * Returns a Fancy Formatted Date/Time Range.
@@ -31,18 +32,17 @@
      *
      * @return {String}
      */
-    function fancyDateRangeFilter(moment) {
-        return function(start, end) {
-
-            // @todo: add TZ support
+    function fancyDateRangeService(moment, pctDateConfig) {
+        return function fancyDateRange(start, end) {
 
             var sameYear = (start.getFullYear() === end.getFullYear());
             var sameMonth = (start.getMonth() === end.getMonth());
             var sameDay = (start.getDate() === end.getDate());
 
             //Moment.js wrappers for the start and end dates
-            var mStart = moment(start);
-            var mEnd = moment(end);
+            //Also make them relative to user's time zone
+            var mStart = moment(start).tz(pctDateConfig.timeZone);
+            var mEnd = moment(end).tz(pctDateConfig.timeZone);
 
             // Same year, month and day
             // ie: April 16 2014, 20:42 to 21:42
