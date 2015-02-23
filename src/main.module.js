@@ -23,7 +23,8 @@
         'pctDate.timezoneSelector',
         'pctDate.utils.jsTzDetect',
         'pctDate.utils.pctDateFilter',
-        'pctDate.utils.pctDateFromFilter'
+        'pctDate.utils.pctDateFromFilter',
+        'pctDate.utils.fancyDateRangeFilter'
     ]);
 
 }) ();
