@@ -129,6 +129,10 @@ Check the [inline docs](src/utils/pctDateFilter/pctDate.filter.js)
 
 Check the [inline docs](src/utils/pctDateFromFilter/pctDateFrom.filter.js)
 
+## [fancyDateRange](src/utils/fancyDateRange)
+
+Check the [inline docs](src/utils/fancyDateRange/fancyDateRange.service.js)
+
 ##  [Time Zone Id manipulation module](src/utils/tzId)
 
 This module is private for now, you can use it just by including `pctDate` in your
