@@ -24,7 +24,7 @@
         'pctDate.utils.jsTzDetect',
         'pctDate.utils.pctDateFilter',
         'pctDate.utils.pctDateFromFilter',
-        'pctDate.utils.fancyDateRangeFilter'
+        'pctDate.utils.fancyDateRange'
     ]);
 
 }) ();
