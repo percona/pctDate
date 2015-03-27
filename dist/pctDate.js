@@ -112,7 +112,8 @@
         'pctDate.utils.jsTzDetect',
         'pctDate.utils.pctDateFilter',
         'pctDate.utils.pctDateFromFilter',
-        'pctDate.utils.fancyDateRange'
+        'pctDate.utils.fancyDateRange',
+        'pctDate.utils.parseDateInTz'
     ]);
 
 }) ();
@@ -386,35 +387,6 @@
 (function() {
     'use strict';
 
-    angular.module('pctDate.utils.jsTzDetect', [])
-        .factory('jsTzDetect', factory);
-
-
-    factory.$inject = ['$window'];
-
-    /**
-     * @ngdoc service
-     * @name jsTzDetect
-     * @description
-     *
-     * Wrapper for jstimezonedetect library.
-     * It's API is pretty slim and you can check it out here:
-     * https://bitbucket.org/pellepim/jstimezonedetect
-     *
-     * @returns {Object} jstz reference
-     *
-     *
-     */
-    function factory($window) {
-        //Since jstz will be concatenated with pctDate we dont need to check
-        //if it has been loaded correctly
-        return $window.jstz;
-    }
-})();
-
-(function() {
-    'use strict';
-
     angular.module('pctDate.utils.fancyDateRange', [
         'pctDate.config',
         'pctMoment'
@@ -502,6 +474,113 @@
 (function() {
     'use strict';
 
+    angular.module('pctDate.utils.jsTzDetect', [])
+        .factory('jsTzDetect', factory);
+
+
+    factory.$inject = ['$window'];
+
+    /**
+     * @ngdoc service
+     * @name jsTzDetect
+     * @description
+     *
+     * Wrapper for jstimezonedetect library.
+     * It's API is pretty slim and you can check it out here:
+     * https://bitbucket.org/pellepim/jstimezonedetect
+     *
+     * @returns {Object} jstz reference
+     *
+     *
+     */
+    function factory($window) {
+        //Since jstz will be concatenated with pctDate we dont need to check
+        //if it has been loaded correctly
+        return $window.jstz;
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('pctDate.utils.parseDateInTz', [
+        'pctDate.config'
+    ])
+        .factory('parseDateInTz', parseDateInTzFactory);
+
+    parseDateInTzFactory.$inject = ['pctDateConfig'];
+
+    /**
+     * @description
+     * Takes a stringDate, a format and a time zone to create a date
+     * representing that string relative to that time zone.
+     *
+     * Nice reference to parsing:
+     * http://momentjs.com/docs/#/parsing
+     *
+     * @param {string} dateString - Any string representing a date, a date and a time, a time,
+     *      etc. The only condition is that can be parse by moment with the correct format string.
+     * @param {string} format - The moment js format string that represents the format that the dateString
+     *      has, indicating where and how it exposes the years, days, months, hours, etc.
+     *
+     * @return {Date}
+     */
+    function parseDateInTzFactory(pctDateConfig) {
+        return function parseDateinTz(dateString, format) {
+            return moment.tz(dateString, format, pctDateConfig.timeZone).toDate();
+        };
+    }
+
+}) ();
+
+(function() {
+    'use strict';
+
+    angular.module('pctDate.utils.pctDateFilter', [
+        'pctDate.config',
+        'pctMoment'
+    ])
+        .filter('pctDate', pctDateFilterDef);
+
+    pctDateFilterDef.$inject = ['moment', 'pctDateConfig'];
+
+    /**
+     * @name pctDate
+     * @description
+     * Useful filter to render dates with a determined format, using `format` Moment method.
+     * This filter uses the pctDateConfig.timeZone value to compute properly time zone setted dates.
+     *
+     * - `format` Moment API: http://momentjs.com/docs/#/displaying/format
+     *
+     * **Note**
+     * This filter is stateful because it depends on the pctDateConfig.timeZone value
+     * (only applicable to Angular 1.3+), see API https://docs.angularjs.org/guide/filter
+     *
+     * @example
+     * {{ date | pctDate:format }} //=> A formated Date String in the pctDateConfig.timeZone
+     *
+     *
+     * @param {Date} date - Javascript Native Date Object, the input date.
+     * @param {string} format - A valid moment.js format string
+     *
+     * @returns {string} A formatted String that displays a date
+     *
+     */
+    function pctDateFilterDef(moment, pctDateConfig) {
+        //Mark this filter as stateful (Angular 1.3+)
+        pctDateFilter.$stateful = true;
+        function pctDateFilter(date, format) {
+            var fromDate;
+
+            return moment(date).tz(pctDateConfig.timeZone).format(format);
+        }
+        return pctDateFilter;
+    }
+})();
+
+(function() {
+    'use strict';
+
     angular.module('pctDate.utils.pctDateFromFilter', [
         'pctDate.config',
         'pctMoment'
@@ -556,51 +635,6 @@
         }
 
         return pctDateFromFilter;
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular.module('pctDate.utils.pctDateFilter', [
-        'pctDate.config',
-        'pctMoment'
-    ])
-        .filter('pctDate', pctDateFilterDef);
-
-    pctDateFilterDef.$inject = ['moment', 'pctDateConfig'];
-
-    /**
-     * @name pctDate
-     * @description
-     * Useful filter to render dates with a determined format, using `format` Moment method.
-     * This filter uses the pctDateConfig.timeZone value to compute properly time zone setted dates.
-     *
-     * - `format` Moment API: http://momentjs.com/docs/#/displaying/format
-     *
-     * **Note**
-     * This filter is stateful because it depends on the pctDateConfig.timeZone value
-     * (only applicable to Angular 1.3+), see API https://docs.angularjs.org/guide/filter
-     *
-     * @example
-     * {{ date | pctDate:format }} //=> A formated Date String in the pctDateConfig.timeZone
-     *
-     *
-     * @param {Date} date - Javascript Native Date Object, the input date.
-     * @param {string} format - A valid moment.js format string
-     *
-     * @returns {string} A formatted String that displays a date
-     *
-     */
-    function pctDateFilterDef(moment, pctDateConfig) {
-        //Mark this filter as stateful (Angular 1.3+)
-        pctDateFilter.$stateful = true;
-        function pctDateFilter(date, format) {
-            var fromDate;
-
-            return moment(date).tz(pctDateConfig.timeZone).format(format);
-        }
-        return pctDateFilter;
     }
 })();
 
