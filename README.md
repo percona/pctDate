@@ -140,6 +140,11 @@ angular app.
 
 For documentation check it's inline docs.
 
+
+##  [parseDateInTz](src/utils/parseDateInTz)
+
+Check out it's inline docs!
+
 # Tests
 
 ```sh
