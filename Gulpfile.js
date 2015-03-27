@@ -87,8 +87,7 @@ gulp.task('jscs', function() {
  */
 gulp.task('continuous', [
         'test:plain',
-        'test:minified',
-        'jscs'
+        'test:minified'
     ]);
 
 
